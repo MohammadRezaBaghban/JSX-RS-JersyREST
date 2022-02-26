@@ -11,6 +11,5 @@ public class CustomApplicationConfig extends ResourceConfig{
         // register Logging of exchanged http messages
         Logger logger = Logger.getLogger(LoggingFeature.DEFAULT_LOGGER_NAME);
         register(new LoggingFeature(logger,Level.INFO,LoggingFeature.Verbosity.PAYLOAD_ANY,LoggingFeature.DEFAULT_MAX_ENTITY_SIZE));
-
     }
 }

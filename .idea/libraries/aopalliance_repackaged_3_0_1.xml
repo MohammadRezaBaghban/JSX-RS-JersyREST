@@ -34,6 +34,7 @@
     <JAVADOC />
     <SOURCES>
       <root url="jar://$PROJECT_DIR$/lib/jersey/jakarta.ws.rs-api-3.0.0-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jersey/org.osgi.core-6.0.0.jar!/OSGI-OPT/src" />
     </SOURCES>
   </library>
 </component>

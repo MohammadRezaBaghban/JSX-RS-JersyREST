@@ -7,6 +7,5 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="javax.ws.rs-api-2.0-m10" level="project" />
   </component>
 </module>

@@ -2,10 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="636aa42d-7a44-471f-b4ce-a58216355973" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Service/src/CustomApplicationConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/jersey_3_0_4.xml" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/Service/src/Publisher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/aopalliance_repackaged_3_0_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/aopalliance_repackaged_3_0_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/javax_ws_rs_api_2_0_m10.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/jersey_container_jdk_http_3_0_4.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/jersey_container_jdk_http_3_0_0.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/jersey_server.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/Client.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/Client.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SOT-Week1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/SOT-Week1.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Service/Service.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Service/Service.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Service/src/CustomApplicationConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/Service/src/CustomApplicationConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Service/src/resources/StudentsResources.java" beforeDir="false" afterPath="$PROJECT_DIR$/Service/src/resources/StudentsResources.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,6 +23,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="AnnotationType" />
         <option value="Class" />
       </list>
     </option>
@@ -32,9 +41,14 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/jersey/yasson-2.0.1.jar" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/service/lib/jersey-container-jdk-http-3.0.0.jar" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -45,6 +59,20 @@
       <recent name="C:\Mrbh\University\Fontys\Curriculum\4th Year\SOT - Service Oriented Techniques\SOT-Week1\service" />
       <recent name="C:\Mrbh\University\Fontys\Curriculum\4th Year\SOT - Service Oriented Techniques\SOT-Week1\service\src" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Publisher" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Publisher" />
+      <module name="service" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Publisher" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -67,5 +95,21 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/service/src/resources/StudentsResources.java</url>
+          <line>16</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/service/src/resources/StudentsResources.java</url>
+          <line>17</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
