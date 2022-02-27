@@ -18,6 +18,11 @@ public class FakeStudentRepository implements StudentRepository {
         students.add(new Student(5,"Miranda Winslet"));
     }
 
+    public Student getStudentByIndex(int index) {
+        if(students.size()<1 || index<0) return null;
+        else return students.get(0);
+    }
+
     @Override
     public int count() { return students.size(); }
 

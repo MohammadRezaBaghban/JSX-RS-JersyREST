@@ -14,4 +14,6 @@ public interface StudentRepository {
     Student get(int nr);
 
     List<Student> filter(String name);
+
+    Student getStudentByIndex(int index);
 }

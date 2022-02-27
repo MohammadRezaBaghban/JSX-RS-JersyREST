@@ -34,4 +34,15 @@ public class StudentsResources {
     public Response getCount(){
         return Response.ok(studentRepository.count()).build();
     }
+
+    @GET //GET at http:localhost:XXXX/scholl/students/first
+    @Path("first")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getFirstStudent(){
+        var student = studentRepository.getStudentByIndex(0);
+        if(student==null){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(student).build();
+    }
 }

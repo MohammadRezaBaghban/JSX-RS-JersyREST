@@ -2,6 +2,7 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Invocation;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
+import model.Student;
 import org.glassfish.jersey.client.ClientConfig;
 import jakarta.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
@@ -17,6 +18,7 @@ public class RestClient {
         WebTarget serviceTarget = client.target(baseURI);
 
         getNumberStudents(serviceTarget);
+        getFirstStudent(serviceTarget);
         callHello(serviceTarget);
 
 
@@ -40,6 +42,18 @@ public class RestClient {
 
         if (response.getStatus()==Response.Status.OK.getStatusCode()) {
             Integer entity =response.readEntity(Integer.class);
+            System.out.println("The resources response is: " + entity);
+        } else {
+            printError(response);
+        }
+    }
+
+    private static void getFirstStudent(WebTarget serviceTarget){
+        Invocation.Builder requestBuilder = serviceTarget.path("first").request().accept(MediaType.APPLICATION_JSON);
+        Response response = requestBuilder.get();
+
+        if (response.getStatus()==Response.Status.OK.getStatusCode()) {
+            Student entity =response.readEntity(Student.class);
             System.out.println("The resources response is: " + entity);
         } else {
             printError(response);

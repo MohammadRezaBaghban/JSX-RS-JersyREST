@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 public class Publisher {
 
-    private static final URI BASE_URI = URI.create("http://localhost:800/school");
+    private static final URI BASE_URI = URI.create("http://localhost:800/school/");
 
     public static void main(String[] args){
         try {
