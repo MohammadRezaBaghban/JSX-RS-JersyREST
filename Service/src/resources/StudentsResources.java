@@ -1,22 +1,20 @@
 package resources;
 
+import model.Student;
 import repository.FakeStudentRepository;
 import repository.StudentRepository;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.*;
 
 import java.awt.*;
+import java.util.Collection;
 import java.util.ResourceBundle;
 
 @Path("/students")
 public class StudentsResources {
 
-    @Context
-    private UriInfo uriInfo;
+
     private StudentRepository studentRepository;
 
     public StudentsResources() {
@@ -60,5 +58,25 @@ public class StudentsResources {
         }
         return Response.ok(student).build();
     }
-    
+
+    @Context
+    private UriInfo uriInfo;
+    @GET //Get at http://localhost:XXXX/school/students?name=Ann
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllStudents(@QueryParam("name") String name) {
+
+        if (!uriInfo.getQueryParameters().containsKey("name")) {
+            GenericEntity<Collection<Student>> entity = new GenericEntity<>(studentRepository.getAll()){};
+            return Response.ok(entity).build();
+        }
+
+        // if query param is present, filter students based on name
+        Collection<Student> filtered = studentRepository.filterStudentsByName(name);
+        if(filtered.isEmpty()){
+            return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid name").build();
+        }
+
+        GenericEntity<Collection<Student>> entity = new GenericEntity<>(filtered){};
+        return Response.ok(entity).build();
+    }
 }

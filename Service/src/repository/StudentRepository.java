@@ -13,7 +13,7 @@ public interface StudentRepository {
 
     Student getById(int id);
 
-    List<Student> filter(String name);
+    List<Student> filterStudentsByName(String name);
 
     Student getStudentByIndex(int index);
 }

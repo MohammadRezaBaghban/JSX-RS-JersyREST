@@ -42,7 +42,14 @@ public class FakeStudentRepository implements StudentRepository {
     }
 
     @Override
-    public List<Student> filter(String name) {
-        return students;
+    public List<Student> filterStudentsByName(String name) {
+        List<Student> studentsResult = new ArrayList<>();
+        for (Student student : students) {
+            if (student.getName() == name)
+                studentsResult.add(student);
+        }
+        return studentsResult;
     }
+
+
 }

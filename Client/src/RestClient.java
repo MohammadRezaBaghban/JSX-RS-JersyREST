@@ -21,11 +21,11 @@ public class RestClient {
         ;
         WebTarget serviceTarget = client.target(baseURI);
 
+        callHello(serviceTarget);
         getNumberStudents(serviceTarget);
         getFirstStudent(serviceTarget);
-        getStudentById(serviceTarget);
-        callHello(serviceTarget);
-
+        getStudentById(serviceTarget,"2");
+        getAllStudentsByQueryParameter(serviceTarget,"Ann");
 
     }
 
@@ -82,8 +82,28 @@ public class RestClient {
         }
     }
 
-    private static void getStudentById(WebTarget serviceTarget) {
-        Invocation.Builder requestBuilder = serviceTarget.path("2").request().accept(MediaType.APPLICATION_JSON);
+    private static void getAllStudentsByQueryParameter(WebTarget serviceTarget, String name) {
+        Invocation.Builder requestBuilder = serviceTarget
+                .queryParam("name", name)
+                .request()
+                .accept(MediaType.APPLICATION_JSON);
+        Response response = requestBuilder.get();
+
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            GenericType<ArrayList<Student>> genericType = new GenericType<>() {
+            };
+            ArrayList<Student> entity = response.readEntity(genericType);
+            System.out.println("The resources response is: ");
+            for (Student student : entity) {
+                System.out.println("\t" + student);
+            }
+        } else {
+            printError(response);
+        }
+    }
+
+    private static void getStudentById(WebTarget serviceTarget, String id) {
+        Invocation.Builder requestBuilder = serviceTarget.path(id).request().accept(MediaType.APPLICATION_JSON);
         Response response = requestBuilder.get();
 
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
