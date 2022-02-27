@@ -97,4 +97,11 @@ public class StudentsResources {
                 "b - P2 = " + p2;
 
     }
+
+    @DELETE //Delete at http://XXXX/school.students/3
+    @Path("{id}")
+    public Response deleteStudent(@PathParam("id") int studentId){
+        studentRepository.deleteById(studentId);
+        return Response.noContent().build();
+    }
 }

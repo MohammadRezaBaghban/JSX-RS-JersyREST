@@ -24,6 +24,16 @@ public class FakeStudentRepository implements StudentRepository {
     }
 
     @Override
+    public void deleteById(int studentId) {
+        for (Student student : students) {
+            if (student.getId() == studentId) {
+                students.remove(student);
+                break;
+            }
+        }
+    }
+
+    @Override
     public int count() {
         return students.size();
     }

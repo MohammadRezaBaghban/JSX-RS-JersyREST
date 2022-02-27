@@ -26,6 +26,7 @@ public class RestClient {
         getFirstStudent(serviceTarget);
         getStudentById(serviceTarget,"2");
         getAllStudentsByQueryParameter(serviceTarget,"Ann");
+        deleteStudentById(serviceTarget,"4");
 
     }
 
@@ -109,6 +110,17 @@ public class RestClient {
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
             Student entity = response.readEntity(Student.class);
             System.out.println("The resources response is: " + entity);
+        } else {
+            printError(response);
+        }
+    }
+
+    private static void deleteStudentById(WebTarget serviceTarget, String id){
+        Invocation.Builder requestBuilder = serviceTarget.path(id).request().accept(MediaType.TEXT_PLAIN);
+        Response response = requestBuilder.get();
+
+        if (response.getStatus() == Response.Status.NO_CONTENT.getStatusCode()) {
+            System.out.println("Deleted student with given ID successfully");
         } else {
             printError(response);
         }

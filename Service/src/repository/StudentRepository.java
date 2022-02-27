@@ -16,4 +16,6 @@ public interface StudentRepository {
     List<Student> filterStudentsByName(String name);
 
     Student getStudentByIndex(int index);
+
+    void deleteById(int studentId);
 }
