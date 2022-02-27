@@ -61,22 +61,40 @@ public class StudentsResources {
 
     @Context
     private UriInfo uriInfo;
+
     @GET //Get at http://localhost:XXXX/school/students?name=Ann
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllStudents(@QueryParam("name") String name) {
 
         if (!uriInfo.getQueryParameters().containsKey("name")) {
-            GenericEntity<Collection<Student>> entity = new GenericEntity<>(studentRepository.getAll()){};
+            GenericEntity<Collection<Student>> entity = new GenericEntity<>(studentRepository.getAll()) {
+            };
             return Response.ok(entity).build();
         }
 
         // if query param is present, filter students based on name
         Collection<Student> filtered = studentRepository.filterStudentsByName(name);
-        if(filtered.isEmpty()){
+        if (filtered.isEmpty()) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid name").build();
         }
 
-        GenericEntity<Collection<Student>> entity = new GenericEntity<>(filtered){};
+        GenericEntity<Collection<Student>> entity = new GenericEntity<>(filtered) {
+        };
         return Response.ok(entity).build();
+    }
+
+    @GET //GET at http://localhost:XXXX/students/me/25/myself/donal/and/i?x=sot&y=8
+    @Path("me/{a}/myself/{b}/and/i")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String exampleQueryAndPATHParameters(
+            @QueryParam("x") String q1,
+            @PathParam("a") int p1,
+            @QueryParam("y") int q2,
+            @PathParam("b") String p2) {
+        return "x - Q1 = " + q1 + "\n" +
+                "y - Q2 = " + q2 + "\n" +
+                "a - P1 = " + p1 + "\n" +
+                "b - P2 = " + p2;
+
     }
 }
