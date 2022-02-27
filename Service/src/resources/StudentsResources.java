@@ -4,6 +4,7 @@ import repository.StudentRepository;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -35,11 +36,22 @@ public class StudentsResources {
         return Response.ok(studentRepository.count()).build();
     }
 
-    @GET //GET at http:localhost:XXXX/scholl/students/first
+    @GET //GET at http:localhost:XXXX/school/students/first
     @Path("first")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getFirstStudent(){
         var student = studentRepository.getStudentByIndex(0);
+        if(student==null){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(student).build();
+    }
+
+    @GET //GET at http:localhost:XXXX/school/students/first
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getFirstStudent(@PathParam("id") int studentId) {
+        var student = studentRepository.get(studentId);
         if(student==null){
             return Response.status(Response.Status.NOT_FOUND).build();
         }

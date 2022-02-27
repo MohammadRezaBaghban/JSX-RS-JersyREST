@@ -21,6 +21,7 @@ public class RestClient {
 
         getNumberStudents(serviceTarget);
         getFirstStudent(serviceTarget);
+        getStudentById(serviceTarget);
         callHello(serviceTarget);
 
 
@@ -73,6 +74,18 @@ public class RestClient {
             for(Student student: entity){
                 System.out.println("\t" + student);
             }
+        } else {
+            printError(response);
+        }
+    }
+
+    private static void getStudentById(WebTarget serviceTarget){
+        Invocation.Builder requestBuilder = serviceTarget.path("2").request().accept(MediaType.APPLICATION_JSON);
+        Response response = requestBuilder.get();
+
+        if (response.getStatus()==Response.Status.OK.getStatusCode()) {
+            Student entity =response.readEntity(Student.class);
+            System.out.println("The resources response is: " + entity);
         } else {
             printError(response);
         }

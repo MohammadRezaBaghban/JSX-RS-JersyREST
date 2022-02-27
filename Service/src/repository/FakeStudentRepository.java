@@ -31,6 +31,9 @@ public class FakeStudentRepository implements StudentRepository {
 
     @Override
     public Student get(int nr) {
+        for (Student student:students){
+            if(student.getId()==nr) return student;
+        }
         return null;
     }
 
