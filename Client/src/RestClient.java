@@ -1,6 +1,7 @@
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Invocation;
 import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
 import model.Student;
 import org.glassfish.jersey.client.ClientConfig;
@@ -8,6 +9,7 @@ import jakarta.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.*;
 import java.net.URI;
+import java.util.ArrayList;
 
 public class RestClient {
 
@@ -55,6 +57,22 @@ public class RestClient {
         if (response.getStatus()==Response.Status.OK.getStatusCode()) {
             Student entity =response.readEntity(Student.class);
             System.out.println("The resources response is: " + entity);
+        } else {
+            printError(response);
+        }
+    }
+
+    private static void getGenericType(WebTarget serviceTarget){
+        Invocation.Builder requestBuilder = serviceTarget.request().accept(MediaType.APPLICATION_JSON);
+        Response response = requestBuilder.get();
+
+        if (response.getStatus()==Response.Status.OK.getStatusCode()) {
+            GenericType<ArrayList<Student>> genericType = new GenericType<>(){};
+            ArrayList<Student> entity = response.readEntity(genericType);
+            System.out.println("The resources response is: ");
+            for(Student student: entity){
+                System.out.println("\t" + student);
+            }
         } else {
             printError(response);
         }
