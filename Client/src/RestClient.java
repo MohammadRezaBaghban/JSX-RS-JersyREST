@@ -16,6 +16,13 @@ public class RestClient {
         URI baseURI = URI.create("http://localhost:800/school/students");;
         WebTarget serviceTarget = client.target(baseURI);
 
+        getNumberStudents(serviceTarget);
+        callHello(serviceTarget);
+
+
+    }
+
+    private static void callHello(WebTarget serviceTarget) {
         Invocation.Builder requestBuilder = serviceTarget.path("hello").request().accept(MediaType.TEXT_PLAIN);
         Response response = requestBuilder.get();
 
@@ -23,10 +30,25 @@ public class RestClient {
             String entity =response.readEntity(String.class);
             System.out.println("The resources response is: " + entity);
         } else {
-            System.err.println("Error: Cannot get Hello: " + response);
-            String entity = response.readEntity(String.class);
-            System.err.println(entity);
+            printError(response);
         }
+    }
 
+    private static void getNumberStudents(WebTarget serviceTarget){
+        Invocation.Builder requestBuilder = serviceTarget.path("count").request().accept(MediaType.TEXT_PLAIN);
+        Response response = requestBuilder.get();
+
+        if (response.getStatus()==Response.Status.OK.getStatusCode()) {
+            Integer entity =response.readEntity(Integer.class);
+            System.out.println("The resources response is: " + entity);
+        } else {
+            printError(response);
+        }
+    }
+
+    private static void printError(Response response){
+        System.err.println("Error: Cannot get Hello: " + response);
+        String entity = response.readEntity(String.class);
+        System.err.println(entity);
     }
 }

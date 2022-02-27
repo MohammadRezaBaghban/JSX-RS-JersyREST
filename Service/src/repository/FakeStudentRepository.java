@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class FakeStudentRepository extends StudentRepository{
+public class FakeStudentRepository implements StudentRepository {
 
     private final List<Student> students = new ArrayList<>();
 
