@@ -15,7 +15,6 @@ public class StudentsResources {
     @Produces(MediaType.TEXT_PLAIN)
     public Response sayHello(){
         String msg = "Hello, your service works!";
-        //return Response.status(Response.Status.OK).entity(msg).build();
-         return Response.ok(msg).build(); //This is another way to create a 200 ok response
+        return Response.status(Response.Status.OK).entity(msg).build();
     }
 }
