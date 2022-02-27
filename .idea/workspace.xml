@@ -13,6 +13,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="AnnotationType" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -38,7 +39,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/service/lib/jersey-container-jdk-http-3.0.0.jar" />
-    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
   </component>
@@ -49,7 +50,7 @@
       <recent name="C:\Mrbh\University\Fontys\Curriculum\4th Year\SOT - Service Oriented Techniques\SOT-Week1\service\src" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Publisher">
     <configuration name="Publisher" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Publisher" />
       <module name="service" />
@@ -57,9 +58,17 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="RestClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="RestClient" />
+      <module name="client" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Publisher" />
+        <item itemvalue="Application.RestClient" />
       </list>
     </recent_temporary>
   </component>
@@ -90,13 +99,23 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/service/src/resources/StudentsResources.java</url>
-          <line>15</line>
-          <option name="timeStamp" value="6" />
+          <line>26</line>
+          <option name="timeStamp" value="11" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/service/src/resources/StudentsResources.java</url>
-          <line>17</line>
-          <option name="timeStamp" value="7" />
+          <line>34</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/service/src/CustomApplicationConfig.java</url>
+          <line>8</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/client/src/RestClient.java</url>
+          <line>18</line>
+          <option name="timeStamp" value="14" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
