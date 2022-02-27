@@ -8,14 +8,19 @@ import java.util.List;
 
 public class FakeStudentRepository implements StudentRepository {
 
+    private static FakeStudentRepository instance = new FakeStudentRepository();
     private final List<Student> students = new ArrayList<>();
 
-    public FakeStudentRepository() {
+    private FakeStudentRepository() {
         students.add(new Student(1, "Joe smith"));
         students.add(new Student(2, "Ann Johnsson"));
         students.add(new Student(3, "Jnn Pereson"));
         students.add(new Student(4, "Mohammad Baghban"));
         students.add(new Student(5, "Miranda Winslet"));
+    }
+
+    public static FakeStudentRepository getInstance() {
+        return instance;
     }
 
     public Student getStudentByIndex(int index) {
@@ -55,8 +60,7 @@ public class FakeStudentRepository implements StudentRepository {
     public List<Student> filterStudentsByName(String name) {
         List<Student> studentsResult = new ArrayList<>();
         for (Student student : students) {
-            if (student.getName() == name)
-                studentsResult.add(student);
+            if (student.getName() == name) studentsResult.add(student);
         }
         return studentsResult;
     }

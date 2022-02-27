@@ -18,7 +18,7 @@ public class StudentsResources {
     private StudentRepository studentRepository;
 
     public StudentsResources() {
-        this.studentRepository = new FakeStudentRepository();
+        this.studentRepository = FakeStudentRepository.getInstance();
     }
 
 
@@ -100,7 +100,7 @@ public class StudentsResources {
 
     @DELETE //Delete at http://XXXX/school.students/3
     @Path("{id}")
-    public Response deleteStudent(@PathParam("id") int studentId){
+    public Response deleteStudent(@PathParam("id") int studentId) {
         studentRepository.deleteById(studentId);
         return Response.noContent().build();
     }
