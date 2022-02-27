@@ -10,29 +10,33 @@ public class FakeStudentRepository implements StudentRepository {
 
     private final List<Student> students = new ArrayList<>();
 
-    public FakeStudentRepository(){
-        students.add(new Student(1,"Joe smith"));
-        students.add(new Student(2,"Ann Johnsson"));
-        students.add(new Student(3,"Jnn Pereson"));
-        students.add(new Student(4,"Mohammad Baghban"));
-        students.add(new Student(5,"Miranda Winslet"));
+    public FakeStudentRepository() {
+        students.add(new Student(1, "Joe smith"));
+        students.add(new Student(2, "Ann Johnsson"));
+        students.add(new Student(3, "Jnn Pereson"));
+        students.add(new Student(4, "Mohammad Baghban"));
+        students.add(new Student(5, "Miranda Winslet"));
     }
 
     public Student getStudentByIndex(int index) {
-        if(students.size()<1 || index<0) return null;
+        if (students.size() < 1 || index < 0) return null;
         else return students.get(0);
     }
 
     @Override
-    public int count() { return students.size(); }
+    public int count() {
+        return students.size();
+    }
 
     @Override
-    public Collection<Student> getAll() { return students; }
+    public Collection<Student> getAll() {
+        return students;
+    }
 
     @Override
-    public Student get(int nr) {
-        for (Student student:students){
-            if(student.getId()==nr) return student;
+    public Student getById(int nr) {
+        for (Student student : students) {
+            if (student.getId() == nr) return student;
         }
         return null;
     }

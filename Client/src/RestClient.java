@@ -6,6 +6,7 @@ import jakarta.ws.rs.core.MediaType;
 import model.Student;
 import org.glassfish.jersey.client.ClientConfig;
 import jakarta.ws.rs.core.Response;
+
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.*;
 import java.net.URI;
@@ -13,10 +14,11 @@ import java.util.ArrayList;
 
 public class RestClient {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         ClientConfig config = new ClientConfig();
-        jakarta.ws.rs.client.Client client =  ClientBuilder.newClient(config);
-        URI baseURI = URI.create("http://localhost:800/school/students");;
+        jakarta.ws.rs.client.Client client = ClientBuilder.newClient(config);
+        URI baseURI = URI.create("http://localhost:800/school/students");
+        ;
         WebTarget serviceTarget = client.target(baseURI);
 
         getNumberStudents(serviceTarget);
@@ -31,47 +33,48 @@ public class RestClient {
         Invocation.Builder requestBuilder = serviceTarget.path("hello").request().accept(MediaType.TEXT_PLAIN);
         Response response = requestBuilder.get();
 
-        if (response.getStatus()==200) {
-            String entity =response.readEntity(String.class);
+        if (response.getStatus() == 200) {
+            String entity = response.readEntity(String.class);
             System.out.println("The resources response is: " + entity);
         } else {
             printError(response);
         }
     }
 
-    private static void getNumberStudents(WebTarget serviceTarget){
+    private static void getNumberStudents(WebTarget serviceTarget) {
         Invocation.Builder requestBuilder = serviceTarget.path("count").request().accept(MediaType.TEXT_PLAIN);
         Response response = requestBuilder.get();
 
-        if (response.getStatus()==Response.Status.OK.getStatusCode()) {
-            Integer entity =response.readEntity(Integer.class);
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Integer entity = response.readEntity(Integer.class);
             System.out.println("The resources response is: " + entity);
         } else {
             printError(response);
         }
     }
 
-    private static void getFirstStudent(WebTarget serviceTarget){
+    private static void getFirstStudent(WebTarget serviceTarget) {
         Invocation.Builder requestBuilder = serviceTarget.path("first").request().accept(MediaType.APPLICATION_JSON);
         Response response = requestBuilder.get();
 
-        if (response.getStatus()==Response.Status.OK.getStatusCode()) {
-            Student entity =response.readEntity(Student.class);
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Student entity = response.readEntity(Student.class);
             System.out.println("The resources response is: " + entity);
         } else {
             printError(response);
         }
     }
 
-    private static void getGenericType(WebTarget serviceTarget){
+    private static void getAllStudents(WebTarget serviceTarget) {
         Invocation.Builder requestBuilder = serviceTarget.request().accept(MediaType.APPLICATION_JSON);
         Response response = requestBuilder.get();
 
-        if (response.getStatus()==Response.Status.OK.getStatusCode()) {
-            GenericType<ArrayList<Student>> genericType = new GenericType<>(){};
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            GenericType<ArrayList<Student>> genericType = new GenericType<>() {
+            };
             ArrayList<Student> entity = response.readEntity(genericType);
             System.out.println("The resources response is: ");
-            for(Student student: entity){
+            for (Student student : entity) {
                 System.out.println("\t" + student);
             }
         } else {
@@ -79,19 +82,19 @@ public class RestClient {
         }
     }
 
-    private static void getStudentById(WebTarget serviceTarget){
+    private static void getStudentById(WebTarget serviceTarget) {
         Invocation.Builder requestBuilder = serviceTarget.path("2").request().accept(MediaType.APPLICATION_JSON);
         Response response = requestBuilder.get();
 
-        if (response.getStatus()==Response.Status.OK.getStatusCode()) {
-            Student entity =response.readEntity(Student.class);
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Student entity = response.readEntity(Student.class);
             System.out.println("The resources response is: " + entity);
         } else {
             printError(response);
         }
     }
 
-    private static void printError(Response response){
+    private static void printError(Response response) {
         System.err.println("Error: Cannot get Hello: " + response);
         String entity = response.readEntity(String.class);
         System.err.println(entity);

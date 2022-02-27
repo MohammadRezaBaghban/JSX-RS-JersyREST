@@ -11,7 +11,7 @@ public interface StudentRepository {
 
     Collection<Student> getAll();
 
-    Student get(int nr);
+    Student getById(int id);
 
     List<Student> filter(String name);
 
