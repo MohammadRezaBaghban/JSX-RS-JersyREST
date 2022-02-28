@@ -18,4 +18,6 @@ public interface StudentRepository {
     Student getStudentByIndex(int index);
 
     void deleteById(int studentId);
+
+    Student add(String name);
 }

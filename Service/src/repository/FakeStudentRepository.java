@@ -10,13 +10,13 @@ public class FakeStudentRepository implements StudentRepository {
 
     private static FakeStudentRepository instance = new FakeStudentRepository();
     private final List<Student> students = new ArrayList<>();
-
+    private int id = 0;
     private FakeStudentRepository() {
-        students.add(new Student(1, "Joe smith"));
-        students.add(new Student(2, "Ann Johnsson"));
-        students.add(new Student(3, "Jnn Pereson"));
-        students.add(new Student(4, "Mohammad Baghban"));
-        students.add(new Student(5, "Miranda Winslet"));
+        students.add(new Student(id++, "Joe smith"));
+        students.add(new Student(id++, "Ann Johnsson"));
+        students.add(new Student(id++, "Jnn Pereson"));
+        students.add(new Student(id++, "Mohammad Baghban"));
+        students.add(new Student(id++, "Miranda Winslet"));
     }
 
     public static FakeStudentRepository getInstance() {
@@ -36,6 +36,13 @@ public class FakeStudentRepository implements StudentRepository {
                 break;
             }
         }
+    }
+
+    @Override
+    public Student add(String name) {
+        var student = new Student(id++,name);
+        students.add(student);
+        return student;
     }
 
     @Override

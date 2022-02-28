@@ -8,13 +8,15 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
 import java.awt.*;
+import java.net.URI;
 import java.util.Collection;
 import java.util.ResourceBundle;
 
 @Path("/students")
 public class StudentsResources {
 
-
+    @Context
+    private UriInfo uriInfo;
     private StudentRepository studentRepository;
 
     public StudentsResources() {
@@ -59,9 +61,6 @@ public class StudentsResources {
         return Response.ok(student).build();
     }
 
-    @Context
-    private UriInfo uriInfo;
-
     @GET //Get at http://localhost:XXXX/school/students?name=Ann
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllStudents(@QueryParam("name") String name) {
@@ -104,4 +103,16 @@ public class StudentsResources {
         studentRepository.deleteById(studentId);
         return Response.noContent().build();
     }
+
+    @POST //Post at http://localhost:XXXX:/school/students/
+    @Consumes (MediaType.APPLICATION_FORM_URLENCODED)
+    public Response createStudent(@FormParam("name") String name){
+        Student student = studentRepository.add(name);
+
+        // url of the created studnet
+        String url = uriInfo.getAbsolutePath()+"/" + student.getId();
+        URI uri = URI.create(url);
+        return Response.created(uri).build();
+    }
+    
 }
