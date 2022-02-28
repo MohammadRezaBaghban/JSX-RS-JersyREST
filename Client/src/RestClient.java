@@ -1,4 +1,5 @@
 import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.Invocation;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.GenericType;
@@ -7,6 +8,7 @@ import model.Student;
 import org.glassfish.jersey.client.ClientConfig;
 import jakarta.ws.rs.core.Response;
 
+import javax.ws.rs.core.Form;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.*;
 import java.net.URI;
@@ -24,9 +26,10 @@ public class RestClient {
         callHello(serviceTarget);
         getNumberStudents(serviceTarget);
         getFirstStudent(serviceTarget);
-        getStudentById(serviceTarget,"2");
-        getAllStudentsByQueryParameter(serviceTarget,"Ann");
-        deleteStudentById(serviceTarget,"4");
+        getStudentById(serviceTarget, "2");
+        getAllStudentsByQueryParameter(serviceTarget, "Ann");
+        deleteStudentById(serviceTarget, "4");
+        deleteStudentById(serviceTarget, "Mohammad");
 
     }
 
@@ -115,12 +118,26 @@ public class RestClient {
         }
     }
 
-    private static void deleteStudentById(WebTarget serviceTarget, String id){
+    private static void deleteStudentById(WebTarget serviceTarget, String id) {
         Invocation.Builder requestBuilder = serviceTarget.path(id).request().accept(MediaType.TEXT_PLAIN);
         Response response = requestBuilder.get();
 
         if (response.getStatus() == Response.Status.NO_CONTENT.getStatusCode()) {
             System.out.println("Deleted student with given ID successfully");
+        } else {
+            printError(response);
+        }
+    }
+
+    private static void createStudentByName(WebTarget serviceTarget, String name) {
+        Form form = new Form();
+        form.param("name", name);
+        Entity<Form> entity = Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED);
+
+        Response response = serviceTarget.request().accept(MediaType.TEXT_PLAIN).post(entity);
+        if (response.getStatus() == Response.Status.CREATED.getStatusCode()) {
+            String studentUrl = response.getHeaderString("Location");
+            System.out.println("POST student is created and can be accessed at: " + studentUrl);
         } else {
             printError(response);
         }
