@@ -20,4 +20,6 @@ public interface StudentRepository {
     void deleteById(int studentId);
 
     Student add(String name);
+
+    void update(Student student);
 }

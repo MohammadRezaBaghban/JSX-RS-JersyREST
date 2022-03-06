@@ -11,6 +11,7 @@ public class FakeStudentRepository implements StudentRepository {
     private static FakeStudentRepository instance = new FakeStudentRepository();
     private final List<Student> students = new ArrayList<>();
     private int id = 0;
+
     private FakeStudentRepository() {
         students.add(new Student(id++, "Joe smith"));
         students.add(new Student(id++, "Ann Johnsson"));
@@ -25,7 +26,7 @@ public class FakeStudentRepository implements StudentRepository {
 
     public Student getStudentByIndex(int index) {
         if (students.size() < 1 || index < 0) return null;
-        else return students.get(0);
+        else return students.get(index);
     }
 
     @Override
@@ -40,9 +41,15 @@ public class FakeStudentRepository implements StudentRepository {
 
     @Override
     public Student add(String name) {
-        var student = new Student(id++,name);
+        var student = new Student(id++, name);
         students.add(student);
         return student;
+    }
+
+    @Override
+    public void update(Student student) {
+        var targetStudent = this.getById(student.getId());
+        if (targetStudent != null) targetStudent = student;
     }
 
     @Override

@@ -30,6 +30,7 @@ public class RestClient {
         getAllStudentsByQueryParameter(serviceTarget, "Ann");
         deleteStudentById(serviceTarget, "4");
         deleteStudentById(serviceTarget, "Mohammad");
+        createStudentByName(serviceTarget,"MohammadReza");
 
     }
 
