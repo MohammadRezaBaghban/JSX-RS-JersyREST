@@ -1,5 +1,5 @@
-import com.sun.net.httpserver.HttpServer;
-import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
+import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 
 import java.io.IOException;
 import java.net.URI;
@@ -13,7 +13,7 @@ public class Publisher {
     public static void main(String[] args) {
         try {
             CustomApplicationConfig config = new CustomApplicationConfig();
-            HttpServer server = JdkHttpServerFactory.createHttpServer(BASE_URI, config, true);
+            HttpServer server = GrizzlyHttpServerFactory.createHttpServer(BASE_URI, config, true);
             System.out.println("Hosting resources at " + BASE_URI.toURL());
 
         } catch (IOException ex) {
