@@ -1,15 +1,7 @@
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.client.Invocation;
-import jakarta.ws.rs.client.WebTarget;
-import jakarta.ws.rs.core.GenericType;
-import jakarta.ws.rs.core.MediaType;
-import model.Student;
 import org.glassfish.jersey.client.ClientConfig;
-import jakarta.ws.rs.core.Response;
 
-import javax.ws.rs.core.Form;
-import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.client.*;
+import javax.ws.rs.core.*;
 import javax.ws.rs.*;
 import java.net.URI;
 import java.util.ArrayList;
@@ -18,7 +10,7 @@ public class RestClient {
 
     public static void main(String[] args) {
         ClientConfig config = new ClientConfig();
-        jakarta.ws.rs.client.Client client = ClientBuilder.newClient(config);
+        Client client = ClientBuilder.newClient(config);
         URI baseURI = URI.create("http://localhost:800/school/students");
         ;
         WebTarget serviceTarget = client.target(baseURI);

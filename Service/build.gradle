@@ -1,0 +1,35 @@
+plugins {
+    id 'java'   // for working with Java
+    id 'application' // for running the application
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral() // get dependencies from https://mvnrepository.com/
+}
+
+application {
+ mainClass.set("Publisher") // set the main class from which the servile will run
+}
+
+dependencies {
+    /* Jersey for the service
+    We use the latest 2.x release because 2.x releases implements JAX-RS 2.1 API
+    We do not use a Jersey 3.x release because 3.x release implement Jakarta RESTful WebServices 3.0 API.
+     */
+
+    implementation group: 'org.glassfish.jersey.bundles', name: 'jaxrs-ri', version:'2.33'
+    implementation group: 'org.glassfish.jersey.containers', name: 'jersey-container-servlet', version:'2.33'
+
+    // Https://mvnrepository.com/artifact/org/glassfish.jersey.containers/jersey-container-jdk-http
+    implementation group: 'org.glassfish.jersey.containers', name: 'jersey-container-grizzly2-http', version: '2.33'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+test {
+    useJUnitPlatform()
+}
