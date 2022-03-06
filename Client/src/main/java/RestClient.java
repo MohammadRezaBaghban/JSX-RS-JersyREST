@@ -15,15 +15,18 @@ public class RestClient {
         ;
         WebTarget serviceTarget = client.target(baseURI);
 
+        // Week 1
         callHello(serviceTarget);
+        getAllStudents(serviceTarget);
         getNumberStudents(serviceTarget);
         getFirstStudent(serviceTarget);
         getStudentById(serviceTarget, "2");
-        getAllStudentsByQueryParameter(serviceTarget, "Ann");
+        getAllStudentsByQueryParameter(serviceTarget, "Ann Johnsson");
+
+        // Week 2
         deleteStudentById(serviceTarget, "4");
-        deleteStudentById(serviceTarget, "Mohammad");
-        createStudentByName(serviceTarget, "MohammadReza");
         updateStudent(serviceTarget);
+        createStudentByName(serviceTarget, "Jack Polister");
 
     }
 
@@ -114,7 +117,7 @@ public class RestClient {
 
     private static void deleteStudentById(WebTarget serviceTarget, String id) {
         Invocation.Builder requestBuilder = serviceTarget.path(id).request().accept(MediaType.TEXT_PLAIN);
-        Response response = requestBuilder.get();
+        Response response = requestBuilder.delete();
 
         if (response.getStatus() == Response.Status.NO_CONTENT.getStatusCode()) {
             System.out.println("Deleted student with given ID successfully");

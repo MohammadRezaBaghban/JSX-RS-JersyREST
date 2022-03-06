@@ -117,11 +117,12 @@ public class StudentsResources {
 
     @PUT //PUT at http://localhost:XXXX/school/studets/
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("id")
+    @Path("{id}")
     public Response updateStudent(@PathParam("id") int studentID, Student student) {
         if (studentRepository.getById(studentID) == null) {
             return Response.status(Response.Status.NOT_FOUND)
-                    .entity("Please provide a valid student number.").build();
+                    .entity("Please provide a valid student number.")
+                    .build();
         }
         studentRepository.update(student);
         return Response.noContent().build();
