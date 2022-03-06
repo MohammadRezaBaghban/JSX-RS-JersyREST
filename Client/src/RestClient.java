@@ -30,7 +30,8 @@ public class RestClient {
         getAllStudentsByQueryParameter(serviceTarget, "Ann");
         deleteStudentById(serviceTarget, "4");
         deleteStudentById(serviceTarget, "Mohammad");
-        createStudentByName(serviceTarget,"MohammadReza");
+        createStudentByName(serviceTarget, "MohammadReza");
+        updateStudent(serviceTarget);
 
     }
 
@@ -142,6 +143,24 @@ public class RestClient {
         } else {
             printError(response);
         }
+    }
+
+    private static void updateStudent(WebTarget serviceTarget) {
+
+        Student student = new Student(3, "Frank");
+        Entity<Student> entity = Entity.entity(student, MediaType.APPLICATION_JSON);
+
+        Response response = serviceTarget
+                .path(Integer.toString(student.getId()))
+                .request().accept(MediaType.TEXT_PLAIN)
+                .put(entity);
+
+        if (response.getStatus() == Response.Status.NO_CONTENT.getStatusCode()) {
+            System.out.println("PUT student in updated");
+        } else {
+            printError(response);
+        }
+
     }
 
     private static void printError(Response response) {

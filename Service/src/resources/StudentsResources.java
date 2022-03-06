@@ -105,14 +105,26 @@ public class StudentsResources {
     }
 
     @POST //Post at http://localhost:XXXX:/school/students/
-    @Consumes (MediaType.APPLICATION_FORM_URLENCODED)
-    public Response createStudent(@FormParam("name") String name){
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response createStudent(@FormParam("name") String name) {
         Student student = studentRepository.add(name);
 
         // url of the created studnet
-        String url = uriInfo.getAbsolutePath()+"/" + student.getId();
+        String url = uriInfo.getAbsolutePath() + "/" + student.getId();
         URI uri = URI.create(url);
         return Response.created(uri).build();
     }
-    
+
+    @PUT //PUT at http://localhost:XXXX/school/studets/
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("id")
+    public Response updateStudent(@PathParam("id") int studentID, Student student) {
+        if (studentRepository.getById(studentID) == null) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("Please provide a valid student number.").build();
+        }
+        studentRepository.update(student);
+        return Response.noContent().build();
+    }
+
 }
