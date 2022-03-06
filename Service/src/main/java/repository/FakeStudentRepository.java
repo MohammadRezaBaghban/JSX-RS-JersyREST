@@ -73,8 +73,11 @@ public class FakeStudentRepository implements StudentRepository {
     @Override
     public List<Student> filterStudentsByName(String name) {
         List<Student> studentsResult = new ArrayList<>();
+        System.out.println(name);
         for (Student student : students) {
-            if (student.getName() == name) studentsResult.add(student);
+            if (student.getName().equals(name) ) {
+                studentsResult.add(student);
+            }
         }
         return studentsResult;
     }
