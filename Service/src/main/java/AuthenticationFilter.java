@@ -18,10 +18,6 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
     private static Map<String, String> credentials = new HashMap<String, String>();
 
-    AuthenticationFilter() {
-        credentials.put("mrbhmr@gmail.com", "1234");
-    }
-
 
     @Context
     private ResourceInfo resourceInfo;
@@ -37,7 +33,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         final MultivaluedMap<String, String> headers = requestContext.getHeaders();
 
         // Fetch Authorization Header
-        final List<String> authorization = headers.get("AUTHORIZATION_PROPERTY");
+        final List<String> authorization = headers.get(AUTHORIZATION_PROPERTY);
 
         if (authorization == null || authorization.isEmpty()) {
             Response response = Response
@@ -49,10 +45,10 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         }
 
         // Get encoded username and password
-        final String encodedCredentials = authorization.get(0).replaceFirst(AUTHENTICATION_SCHEME + "", "");
+        final String encodedCredentials = authorization.get(0).replaceFirst(AUTHENTICATION_SCHEME + " ", "");
 
         //Decode username and password into one string
-        String credentials = new String(Base64.getDecoder().decode(encodedCredentials.getBytes());
+        String credentials = new String(Base64.getDecoder().decode(encodedCredentials.getBytes()));
 
         // Split username and password into one string
         final StringTokenizer tokenizer = new StringTokenizer(credentials, ":");
@@ -88,6 +84,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     }
 
     private boolean isValidUser(String username, String password) {
+        credentials.put("mrbhmr@gmail.com", "1234");
         if (credentials.containsKey(username)) {
             var credentialPassword = credentials.get(username);
             return credentialPassword.equals(password);
