@@ -4,6 +4,9 @@ import model.Student;
 import repository.FakeStudentRepository;
 import repository.StudentRepository;
 
+import javax.annotation.security.DenyAll;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
@@ -26,6 +29,7 @@ public class StudentsResources {
 
     @GET //GET at http://localhost:XXXX/students/hello
     @Path("/hello")
+    @PermitAll
     @Produces(MediaType.TEXT_PLAIN)
     public Response sayHello() {
         String msg = "Hello, your service works!";
@@ -62,6 +66,7 @@ public class StudentsResources {
     }
 
     @GET //Get at http://localhost:XXXX/school/students?name=Ann
+    @RolesAllowed({"TEACHER","ADMIN"})
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllStudents(@QueryParam("name") String name) {
 
@@ -99,6 +104,7 @@ public class StudentsResources {
 
     @DELETE //Delete at http://XXXX/school.students/3
     @Path("{id}")
+    @DenyAll
     public Response deleteStudent(@PathParam("id") int studentId) {
         studentRepository.deleteById(studentId);
         return Response.noContent().build();
