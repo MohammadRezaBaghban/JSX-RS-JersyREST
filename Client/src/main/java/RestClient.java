@@ -1,4 +1,5 @@
 import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.*;
@@ -9,11 +10,18 @@ import java.util.ArrayList;
 public class RestClient {
 
     public static void main(String[] args) {
+
+        String username = "mrbhmr@gmail.com";
+        String password = "1234";
         ClientConfig config = new ClientConfig();
+        config.register(HttpAuthenticationFeature.basic(username,password));
+
         Client client = ClientBuilder.newClient(config);
-        URI baseURI = URI.create("http://localhost:800/school/students");
-        ;
+        URI baseURI = URI.create("http://localhost:900/school/students");
+
         WebTarget serviceTarget = client.target(baseURI);
+
+        Week4(serviceTarget);
 
         // Week 1
         callHello(serviceTarget);
@@ -26,8 +34,20 @@ public class RestClient {
         // Week 2
         deleteStudentById(serviceTarget, "4");
         updateStudent(serviceTarget);
+        getAllStudents(serviceTarget);
         createStudentByName(serviceTarget, "Jack Polister");
 
+    }
+
+    private static void Week4(WebTarget serviceTarget){
+        //Allow
+        callHello(serviceTarget);
+
+        // Forbidden
+        deleteStudentById(serviceTarget,"4");
+
+        //Allow
+        getAllStudents(serviceTarget);
     }
 
     private static void callHello(WebTarget serviceTarget) {
