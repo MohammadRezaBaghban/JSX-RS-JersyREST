@@ -125,14 +125,15 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         setup();
         if (credentials.containsKey(username)) {
             var credentialPassword = credentials.get(username);
-            return credentialPassword.equals(password);
+            return credentialPassword.get_password().equals(password);
         }
         return false;
     }
 
     private boolean isUserAllowed(String username, String password, Set<String> rolesSet) {
         var user = credentials.get(username);
-        for (String role : user.get_roles()) {
+        var userRoles = user.get_roles();
+        for (String role : userRoles ) {
             if (rolesSet.contains(role))
                 return true;
         }

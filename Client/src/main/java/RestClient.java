@@ -21,6 +21,8 @@ public class RestClient {
 
         WebTarget serviceTarget = client.target(baseURI);
 
+        Week4(serviceTarget);
+
         // Week 1
         callHello(serviceTarget);
         getAllStudents(serviceTarget);
@@ -35,6 +37,17 @@ public class RestClient {
         getAllStudents(serviceTarget);
         createStudentByName(serviceTarget, "Jack Polister");
 
+    }
+
+    private static void Week4(WebTarget serviceTarget){
+        //Allow
+        callHello(serviceTarget);
+
+        // Forbidden
+        deleteStudentById(serviceTarget,"4");
+
+        //Allow
+        getAllStudents(serviceTarget);
     }
 
     private static void callHello(WebTarget serviceTarget) {
