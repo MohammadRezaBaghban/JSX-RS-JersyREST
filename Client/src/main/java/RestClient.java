@@ -11,7 +11,7 @@ public class RestClient {
     public static void main(String[] args) {
         ClientConfig config = new ClientConfig();
         Client client = ClientBuilder.newClient(config);
-        URI baseURI = URI.create("http://localhost:800/school/students");
+        URI baseURI = URI.create("http://localhost:900/school/students");
         ;
         WebTarget serviceTarget = client.target(baseURI);
 
@@ -26,6 +26,7 @@ public class RestClient {
         // Week 2
         deleteStudentById(serviceTarget, "4");
         updateStudent(serviceTarget);
+        getAllStudents(serviceTarget);
         createStudentByName(serviceTarget, "Jack Polister");
 
     }

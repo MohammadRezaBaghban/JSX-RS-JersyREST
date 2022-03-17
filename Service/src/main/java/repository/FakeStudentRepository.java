@@ -49,7 +49,8 @@ public class FakeStudentRepository implements StudentRepository {
     @Override
     public void update(Student student) {
         var targetStudent = this.getById(student.getId());
-        if (targetStudent != null) targetStudent = student;
+        if (targetStudent != null)
+            targetStudent.setName(student.getName());
     }
 
     @Override
