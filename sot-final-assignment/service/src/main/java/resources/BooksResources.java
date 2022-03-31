@@ -19,7 +19,7 @@ public class BooksResources {
 
     @Context
     private UriInfo uriInfo;
-    private BookRepository studentRepository;
+    private BookRepository bookRepository;
 
     public BooksResources() {
         //this.studentRepository = FakeBookRepository.getInstance();
@@ -31,7 +31,7 @@ public class BooksResources {
     @PermitAll
     @Produces(MediaType.TEXT_PLAIN)
     public Response sayHello() {
-        String msg = "Hello, your service works!";
+        String msg = "Hello, your book endpoint works!";
         return Response.status(Response.Status.OK).entity(msg).build();
     }
 

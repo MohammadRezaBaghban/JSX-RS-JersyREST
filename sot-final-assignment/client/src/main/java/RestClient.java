@@ -18,20 +18,23 @@ public class RestClient {
         //config.register(HttpAuthenticationFeature.basic(username,password));
 
         Client client = ClientBuilder.newClient(new ClientConfig());
-        URI baseURIBooks = URI.create("http://localhost:900/BookStore/books");
-        //URI baseURISubjects = URI.create("http://localhost:900/BookStore/subjects");
-
-        serviceBooks = client.target(baseURIBooks);
-        //serviceSubjects = client.target(baseURIBooks);
+        serviceBooks = client.target(URI.create("http://localhost:900/BookStore/books"));
+        serviceSubjects = client.target(URI.create("http://localhost:900/BookStore/subjects"));
 
         testBooks();
+        testSubjects();
     }
 
     public static void testBooks(){
-        callHelloBooks();
+        callHello(serviceBooks);
     }
-    private static void callHelloBooks() {
-        Invocation.Builder requestBuilder = serviceBooks.path("hello").request().accept(MediaType.TEXT_PLAIN);
+
+    public static void testSubjects(){
+        callHello(serviceSubjects);
+    }
+
+    private static void callHello(WebTarget service) {
+        Invocation.Builder requestBuilder = service.path("hello").request().accept(MediaType.TEXT_PLAIN);
         Response response = requestBuilder.get();
 
         if (response.getStatus() == 200) {
