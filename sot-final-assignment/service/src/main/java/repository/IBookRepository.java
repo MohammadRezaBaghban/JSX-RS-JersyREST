@@ -16,9 +16,9 @@ public interface IBookRepository {
 
     Book getBookByIndex(int index);
 
-    void deleteById(int book);
+    void deleteById(int bookId);
 
-    Book add(String name);
+    Book add(Book book);
 
     void update(Book book);
 }
