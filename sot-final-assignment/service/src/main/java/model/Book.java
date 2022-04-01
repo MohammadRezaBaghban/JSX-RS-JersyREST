@@ -12,7 +12,7 @@ public class Book {
     public Book(){};
 
     public Book(String name, String subject, double price) {
-        this.id = ++id;
+        this.id = ++bookId;
         this.name = name;
         this.subject = subject;
         this.price = price;

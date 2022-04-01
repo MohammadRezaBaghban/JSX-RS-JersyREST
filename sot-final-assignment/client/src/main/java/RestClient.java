@@ -30,6 +30,10 @@ public class RestClient {
         callHello(serviceBooks);
         getNumberObject(serviceBooks);
         getFirstObject(serviceBooks);
+        getAllObjects(serviceBooks);
+        getObjectById(serviceBooks,"2");
+        getObjectById(serviceBooks,"10");
+
     }
 
     public static void testSubjects(){
@@ -71,6 +75,36 @@ public class RestClient {
             printError(response);
         }
     }
+    private static void getAllObjects(WebTarget service) {
+        Invocation.Builder requestBuilder = service.request().accept(MediaType.APPLICATION_JSON);
+        Response response = requestBuilder.get();
+        String endPointName = endPointName(service);
+
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            GenericType<ArrayList<Book>> genericType = new GenericType<>() {
+            };
+            ArrayList<Book> entity = response.readEntity(genericType);
+            System.out.println("The resources response of "+ endPointName + "is: " + entity);
+            for (Book book : entity) {
+                System.out.println("\t" + book.toString());
+            }
+        } else {
+            printError(response);
+        }
+    }
+    private static void getObjectById(WebTarget service, String id) {
+        Invocation.Builder requestBuilder = service.path(id).request().accept(MediaType.APPLICATION_JSON);
+        Response response = requestBuilder.get();
+        String endPointName = endPointName(service);
+
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Book entity = response.readEntity(Book.class);
+            System.out.println("The resources response of "+ endPointName + "is: " + entity);
+        } else {
+            printError(response);
+        }
+    }
+
 
 
     private static void printError(Response response) {
