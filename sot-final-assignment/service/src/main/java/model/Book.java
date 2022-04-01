@@ -63,10 +63,10 @@ public class Book {
     @Override
     public String toString() {
         return "Book{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", subject='" + subject + '\'' +
-                ", price=" + price +
+                "id=" + this.id +
+                ", name='" + this.name + '\'' +
+                ", subject='" + this.subject + '\'' +
+                ", price=" + this.price +
                 '}';
     }
 }

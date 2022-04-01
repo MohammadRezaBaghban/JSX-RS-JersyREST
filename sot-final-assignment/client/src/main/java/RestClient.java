@@ -4,6 +4,7 @@ import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.*;
 import javax.ws.rs.*;
+import java.awt.print.Book;
 import java.net.URI;
 import java.util.ArrayList;
 
@@ -27,6 +28,8 @@ public class RestClient {
 
     public static void testBooks(){
         callHello(serviceBooks);
+        getNumberObject(serviceBooks);
+        getFirstObject(serviceBooks);
     }
 
     public static void testSubjects(){
@@ -44,10 +47,42 @@ public class RestClient {
             printError(response);
         }
     }
+    private static void getNumberObject(WebTarget service) {
+        Invocation.Builder requestBuilder = service.path("count").request().accept(MediaType.TEXT_PLAIN);
+        Response response = requestBuilder.get();
+        String endPointName = endPointName(service);
+
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Integer entity = response.readEntity(Integer.class);
+            System.out.println("The resources response of "+ endPointName + "is: " + entity);
+        } else {
+            printError(response);
+        }
+    }
+    private static void getFirstObject(WebTarget service) {
+        Invocation.Builder requestBuilder = service.path("first").request().accept(MediaType.APPLICATION_JSON);
+        Response response = requestBuilder.get();
+        String endPointName = endPointName(service);
+
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Book entity = response.readEntity(Book.class);
+            System.out.println("The resources response of "+ endPointName + "is: " + entity);
+        } else {
+            printError(response);
+        }
+    }
+
 
     private static void printError(Response response) {
         System.err.println("Error: Cannot get Hello: " + response);
         String entity = response.readEntity(String.class);
         System.err.println(entity);
+    }
+
+    private static String endPointName(WebTarget service){
+        if (service.getUri().toString().contains("books"))
+            return "books endpoint";
+        else
+            return "subjects endpoint";
     }
 }
