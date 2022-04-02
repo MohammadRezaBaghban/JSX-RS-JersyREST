@@ -28,6 +28,10 @@ public class RestClient {
     }
 
     public static void testBooks() {
+        getObjectById(serviceBooks, "3");
+        deleteBookById(serviceBooks,"3");
+        getObjectById(serviceBooks, "3");
+
         callHello(serviceBooks);
         getNumberObject(serviceBooks);
         getFirstObject(serviceBooks);
@@ -35,7 +39,7 @@ public class RestClient {
         getObjectById(serviceBooks, "2");
         getObjectById(serviceBooks, "10");
         getAllBooksByQueryParameter(serviceBooks, "Computer Science");
-        searchBooksBySubjectAndMaxPrice(serviceBooks,"Natural Science",20);
+        searchBooksBySubjectAndMaxPrice(serviceBooks, "Natural Science", 20);
     }
 
     public static void testSubjects() {
@@ -131,11 +135,18 @@ public class RestClient {
         Response response = requestBuilder.get();
         String endPointName = endPointName(service);
 
-        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+        if (response.getStatus() == Response.Status.OK.getStatusCode())
             handleCollectionOfObjects(response);
-        } else {
-            printError(response);
-        }
+        else printError(response);
+    }
+
+    private static void deleteBookById(WebTarget service, String id) {
+        Invocation.Builder requestBuilder = service.path(id).request().accept(MediaType.TEXT_PLAIN);
+        Response response = requestBuilder.delete();
+
+        if (response.getStatus() == Response.Status.NO_CONTENT.getStatusCode())
+            System.out.println("Deleted book with given ID successfully");
+        else printError(response);
     }
 
     private static void printError(Response response) {

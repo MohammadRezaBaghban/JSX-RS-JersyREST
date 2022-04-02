@@ -4,6 +4,7 @@ import model.Book;
 import repository.FakeBookRepository;
 import repository.IBookRepository;
 
+import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
@@ -98,8 +99,13 @@ public class BooksResources {
             return Response.ok(distinctResult).build();
         else
             return Response.status(Response.Status.OK).entity("No book with given filter found").build();
-
     }
 
+    @DELETE //Delete at http://XXXX/BookStore/Books/3
+    @Path("{id}")
+    public Response deleteStudent(@PathParam("id") int bookId) {
+        bookRepository.deleteById(bookId);
+        return Response.noContent().build();
+    }
 
 }
