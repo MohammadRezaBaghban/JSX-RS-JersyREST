@@ -9,6 +9,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 @Path("/books")
 public class BooksResources {
@@ -72,13 +73,32 @@ public class BooksResources {
 
         // if query param is present, filter students based on name
         Collection<Book> filtered = bookRepository.filterBooksBySubject(name);
-        if (filtered.isEmpty()) {
+        if (filtered.isEmpty())
             return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid subject name").build();
-        }
 
         GenericEntity<Collection<Book>> entity = new GenericEntity<>(filtered) {
         };
         return Response.ok(entity).build();
+    }
+
+    @GET //GET at http://localhost:XXXX/BookStore/books/Computer Science?x=17
+    @Path("search/{subject}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response exampleQueryAndPATHParameters(
+            @QueryParam("maxPrice") double maxPrice,
+            @PathParam("subject") String p1Subject) {
+
+        var result = bookRepository.filterBooksBySubject(p1Subject);
+        result.addAll(bookRepository.getAll().stream()
+                .filter(book -> book.getPrice() <= maxPrice)
+                .collect(Collectors.toList()));
+        var distinctResult = result.stream().distinct().collect(Collectors.toList());
+
+        if (distinctResult.size() > 0)
+            return Response.ok(distinctResult).build();
+        else
+            return Response.status(Response.Status.OK).entity("No book with given filter found").build();
+
     }
 
 
