@@ -109,6 +109,7 @@ public class BooksResources {
         return Response.noContent().build();
     }
 
+
     @POST //Post at http://localhost:XXXX:/BookStore/books/
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response createStudent(
@@ -121,6 +122,19 @@ public class BooksResources {
 
         // url of the created book
         String url = uriInfo.getAbsolutePath() + "/" + book.getId();
+        URI uri = URI.create(url);
+        return Response.created(uri).build();
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response create(Book book) {
+
+        var bookObj = new Book(book.getName(),book.getSubject(),book.getPrice());
+        bookRepository.add(bookObj);
+
+        String url = uriInfo.getAbsolutePath() + "/" + bookObj.getId();
         URI uri = URI.create(url);
         return Response.created(uri).build();
     }
