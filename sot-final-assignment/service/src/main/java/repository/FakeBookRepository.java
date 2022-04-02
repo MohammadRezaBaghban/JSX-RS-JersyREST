@@ -44,11 +44,11 @@ public class FakeBookRepository implements IBookRepository {
     }
 
     @Override
-    public List<Book> filterBooksByName(String name) {
+    public List<Book> filterBooksBySubject(String subjectName) {
         List<Book> booksResult = new ArrayList<>();
-        System.out.println(name);
+        System.out.println(subjectName);
         for (Book book : books) {
-            if (book.getName().equals(name) ) {
+            if (book.getSubject().equals(subjectName) ) {
                 booksResult.add(book);
             }
         }

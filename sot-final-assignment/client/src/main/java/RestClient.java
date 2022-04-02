@@ -33,7 +33,7 @@ public class RestClient {
         getAllObjects(serviceBooks);
         getObjectById(serviceBooks,"2");
         getObjectById(serviceBooks,"10");
-
+        getAllBooksByQueryParameter(serviceBooks,"Computer Science");
     }
 
     public static void testSubjects(){
@@ -104,7 +104,25 @@ public class RestClient {
             printError(response);
         }
     }
+    private static void getAllBooksByQueryParameter(WebTarget service, String subjectName) {
+        Invocation.Builder requestBuilder = service
+                .queryParam("subject", subjectName)
+                .request()
+                .accept(MediaType.APPLICATION_JSON);
+        Response response = requestBuilder.get();
 
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            GenericType<ArrayList<Book>> genericType = new GenericType<>() {
+            };
+            ArrayList<Book> entity = response.readEntity(genericType);
+            System.out.println("The resources response is: ");
+            for (Book book : entity) {
+                System.out.println("\t" + book);
+            }
+        } else {
+            printError(response);
+        }
+    }
 
 
     private static void printError(Response response) {

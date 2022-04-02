@@ -59,21 +59,21 @@ public class BooksResources {
         return Response.ok(book).build();
     }
 
-    @GET //Get at http://localhost:XXXX/BookStore/books?name=Calculus I
+    @GET //Get at http://localhost:XXXX/BookStore/books?subject=Computer Science
     //@RolesAllowed({"TEACHER","ADMIN"})
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllBooks(@QueryParam("name") String name) {
+    public Response getAllBooks(@QueryParam("subject") String name) {
 
-        if (!uriInfo.getQueryParameters().containsKey("name")) {
+        if (!uriInfo.getQueryParameters().containsKey("subject")) {
             GenericEntity<Collection<Book>> entity = new GenericEntity<>(bookRepository.getAll()) {
             };
             return Response.ok(entity).build();
         }
 
         // if query param is present, filter students based on name
-        Collection<Book> filtered = bookRepository.filterBooksByName(name);
+        Collection<Book> filtered = bookRepository.filterBooksBySubject(name);
         if (filtered.isEmpty()) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid name").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid subject name").build();
         }
 
         GenericEntity<Collection<Book>> entity = new GenericEntity<>(filtered) {

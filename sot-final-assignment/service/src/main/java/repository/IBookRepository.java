@@ -12,7 +12,7 @@ public interface IBookRepository {
 
     Book getById(int id);
 
-    List<Book> filterBooksByName(String name);
+    List<Book> filterBooksBySubject(String subjectName);
 
     Book getBookByIndex(int index);
 
