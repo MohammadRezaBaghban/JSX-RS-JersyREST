@@ -1,10 +1,9 @@
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
-
+import model.Book;
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.*;
 import javax.ws.rs.*;
-import java.awt.print.Book;
 import java.net.URI;
 import java.util.ArrayList;
 
@@ -29,10 +28,9 @@ public class RestClient {
 
     public static void testBooks() {
 
-        // Create Book
-        getNumberObject(serviceBooks);
-        createBookByName(serviceBooks,"Logic & Set Theory","Mathematics",46.0);
-        getNumberObject(serviceBooks);
+        getObjectById(serviceBooks, "3");
+        updateBook(serviceBooks);
+        getObjectById(serviceBooks, "3");
 
         callHello(serviceBooks);
         getNumberObject(serviceBooks);
@@ -43,12 +41,15 @@ public class RestClient {
         getAllBooksByQueryParameter(serviceBooks, "Computer Science");
         searchBooksBySubjectAndMaxPrice(serviceBooks, "Natural Science", 20);
 
-
-
         // Delete Book
         getObjectById(serviceBooks, "3");
         deleteBookById(serviceBooks,"3");
         getObjectById(serviceBooks, "3");
+
+        // Create Book
+        getNumberObject(serviceBooks);
+        createBookByName(serviceBooks,"Logic & Set Theory","Mathematics",46.0);
+        getNumberObject(serviceBooks);
     }
 
     public static void testSubjects() {
@@ -193,6 +194,24 @@ public class RestClient {
             String bookUrl = response.getHeaderString("Location");
             System.out.println("POST book is created and can be accessed at: " + bookUrl);
         } else printError(response);
+    }
+
+    private static void updateBook(WebTarget serviceTarget) {
+
+        Book book = new Book("Introduction to user interface", "UX Design",38.7);
+        book.setBookId(3);
+        Entity<Book> entity = Entity.entity(book, MediaType.APPLICATION_JSON);
+
+        Response response = serviceTarget
+                .path(Integer.toString(book.getId()))
+                .request().accept(MediaType.TEXT_PLAIN)
+                .put(entity);
+
+        if (response.getStatus() == Response.Status.NO_CONTENT.getStatusCode()) {
+            System.out.println("PUT book is updated");
+        } else {
+            printError(response);
+        }
 
     }
 }

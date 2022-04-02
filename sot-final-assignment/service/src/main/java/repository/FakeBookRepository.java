@@ -79,8 +79,8 @@ public class FakeBookRepository implements IBookRepository {
     }
 
     @Override
-    public void update(Book book) {
-        var bookObj = this.getById(book.getId());
+    public void update(int bookId, Book book) {
+        var bookObj = this.getById(bookId);
         if (bookObj != null){
             bookObj.setName(book.getName());
             bookObj.setPrice(book.getPrice());

@@ -139,4 +139,17 @@ public class BooksResources {
         return Response.created(uri).build();
     }
 
+    @PUT //PUT at http://localhost:XXXX/BookStore/Book/id
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("{id}")
+    public Response updateStudent(@PathParam("id") int bookId, Book book) {
+        if (bookRepository.getById(bookId) == null) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("Please provide a valid book id.")
+                    .build();
+        }
+        bookRepository.update(bookId,book);
+        return Response.noContent().build();
+    }
+
 }

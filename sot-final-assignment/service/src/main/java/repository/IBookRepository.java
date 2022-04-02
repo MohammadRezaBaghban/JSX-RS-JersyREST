@@ -20,5 +20,5 @@ public interface IBookRepository {
 
     Book add(Book book);
 
-    void update(Book book);
+    void update(int bookId, Book book);
 }
