@@ -20,6 +20,7 @@ dependencies {
     We do not use a Jersey 3.x release because 3.x release implement Jakarta RESTful WebServices 3.0 API.
      */
 
+    implementation group: 'org.glassfish.jersey.media', name:'jersey-media-json-jackson',version:'2.33'
     implementation group: 'org.glassfish.jersey.bundles', name: 'jaxrs-ri', version:'2.33'
     implementation group: 'org.glassfish.jersey.containers', name: 'jersey-container-servlet', version:'2.33'
 

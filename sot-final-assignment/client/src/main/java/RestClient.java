@@ -28,9 +28,11 @@ public class RestClient {
     }
 
     public static void testBooks() {
-        getObjectById(serviceBooks, "3");
-        deleteBookById(serviceBooks,"3");
-        getObjectById(serviceBooks, "3");
+
+        // Create Book
+        getNumberObject(serviceBooks);
+        createBookByName(serviceBooks,"Logic & Set Theory","Mathematics",46.0);
+        getNumberObject(serviceBooks);
 
         callHello(serviceBooks);
         getNumberObject(serviceBooks);
@@ -40,6 +42,13 @@ public class RestClient {
         getObjectById(serviceBooks, "10");
         getAllBooksByQueryParameter(serviceBooks, "Computer Science");
         searchBooksBySubjectAndMaxPrice(serviceBooks, "Natural Science", 20);
+
+
+
+        // Delete Book
+        getObjectById(serviceBooks, "3");
+        deleteBookById(serviceBooks,"3");
+        getObjectById(serviceBooks, "3");
     }
 
     public static void testSubjects() {
@@ -170,5 +179,20 @@ public class RestClient {
         for (Book book : entity) {
             System.out.println("\t" + book);
         }
+    }
+
+    private static void createBookByName(WebTarget serviceTarget, String name, String subject, double price) {
+        Form form = new Form();
+        form.param("name", name);
+        form.param("subject",subject);
+        form.param("price", String.valueOf(price));
+        Entity<Form> entity = Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED);
+
+        Response response = serviceTarget.request().accept(MediaType.TEXT_PLAIN).post(entity);
+        if (response.getStatus() == Response.Status.CREATED.getStatusCode()) {
+            String bookUrl = response.getHeaderString("Location");
+            System.out.println("POST book is created and can be accessed at: " + bookUrl);
+        } else printError(response);
+
     }
 }

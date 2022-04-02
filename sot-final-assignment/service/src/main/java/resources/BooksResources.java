@@ -9,6 +9,7 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.net.URI;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -106,6 +107,22 @@ public class BooksResources {
     public Response deleteStudent(@PathParam("id") int bookId) {
         bookRepository.deleteById(bookId);
         return Response.noContent().build();
+    }
+
+    @POST //Post at http://localhost:XXXX:/BookStore/books/
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response createStudent(
+            @FormParam("name") String name,
+            @FormParam("subject") String subject,
+            @FormParam("price") double price
+            ) {
+        var book = new Book(name,subject,price);
+        bookRepository.add(book);
+
+        // url of the created book
+        String url = uriInfo.getAbsolutePath() + "/" + book.getId();
+        URI uri = URI.create(url);
+        return Response.created(uri).build();
     }
 
 }
