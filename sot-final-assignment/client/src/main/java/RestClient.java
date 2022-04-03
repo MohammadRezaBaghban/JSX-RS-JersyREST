@@ -18,7 +18,8 @@ public class RestClient {
 
         String username = "mrbhmr@gmail.com";
         String password = "1234";
-        //config.register(HttpAuthenticationFeature.basic(username,password));
+        ClientConfig config = new ClientConfig();
+        config.register(HttpAuthenticationFeature.basic(username,password));
 
         Client client = ClientBuilder.newClient(new ClientConfig());
         serviceBooks = client.target(URI.create("http://localhost:900/BookStore/books"));

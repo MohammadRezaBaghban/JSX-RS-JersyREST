@@ -1,3 +1,4 @@
+import auth.AuthenticationFilter;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import resources.BooksResources;
@@ -12,6 +13,7 @@ public class CustomApplicationConfig extends ResourceConfig {
         register(BooksResources.class); // register endpoint BookResources
         register(SubjectsResources.class); // register endpoint SubjectResources
         register(OrderResources.class); // register endpoint OrderResource
+        register(AuthenticationFilter.class);
 
         // register Logging of exchanged http messages
         Logger logger = Logger.getLogger(LoggingFeature.DEFAULT_LOGGER_NAME);
