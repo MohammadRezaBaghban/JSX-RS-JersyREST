@@ -270,7 +270,7 @@ public class EndpointTests {
             getObjectById(service, idStr);
         }
 
-        public static void testCreate(WebTarget service, String name, String subject, double price) {
+        public static void testCreate(WebTarget service, String name) {
             getNumberObject(service);
             createSubjectByName(service, name);
             getNumberObject(service);

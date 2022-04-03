@@ -53,6 +53,15 @@ public class SubjectsResources {
         return Response.ok(book).build();
     }
 
+    @GET //GET at http:localhost:XXXX/BookStore/books/first
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSubjectById(@PathParam("id") int subjectId) {
+        var subject = subjectRepository.getById(subjectId);
+        if (subject == null)   return Response.status(Response.Status.NOT_FOUND).build();
+        return Response.ok(subject).build();
+    }
+
     @GET //Get at http://localhost:XXXX/BookStore/subjects?subject=Computer Science
     //@RolesAllowed({"TEACHER","ADMIN"})
     @Produces(MediaType.APPLICATION_JSON)

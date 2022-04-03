@@ -23,8 +23,8 @@ public class RestClient {
         serviceBooks = client.target(URI.create("http://localhost:900/BookStore/books"));
         serviceSubjects = client.target(URI.create("http://localhost:900/BookStore/subjects"));
 
-        testBooks();
         testSubjects();
+        testBooks();
     }
 
     public static void testBooks() {
@@ -48,6 +48,18 @@ public class RestClient {
     public static void testSubjects() {
         EndpointTests.callHello(serviceSubjects);
         EndpointTests.getNumberObject(serviceSubjects);
+        EndpointTests.SubjectTest.getFirstObject(serviceSubjects);
+        EndpointTests.SubjectTest.getAllObjects(serviceSubjects);
+        EndpointTests.getObjectById(serviceSubjects, "2");
+        EndpointTests.getObjectById(serviceSubjects, "10");
+        EndpointTests.SubjectTest.getAllSubjectsByQueryParameter(serviceSubjects, "Computer Science");
+
+        // Update Book
+        EndpointTests.SubjectTest.testUpdate(serviceSubjects,3,"Politics");
+        // Delete Book
+        EndpointTests.testDelete(serviceSubjects,3);
+        // Create Book
+        EndpointTests.SubjectTest.testCreate(serviceSubjects,"Sociology");
 
     }
 
