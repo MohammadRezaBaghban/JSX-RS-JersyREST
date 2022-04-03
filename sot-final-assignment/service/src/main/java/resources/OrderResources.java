@@ -8,11 +8,9 @@ import repository.IOrderRepository;
 
 import javax.annotation.security.PermitAll;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.*;
 import java.net.URI;
+import java.util.Collection;
 
 @Path("/orders")
 public class OrderResources {
@@ -33,6 +31,13 @@ public class OrderResources {
         return Response.status(Response.Status.OK).entity(msg).build();
     }
 
+    @GET //GET at http://localhost:XXXX/BookStore/books/count
+    @Path("count")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getCount() {
+        return Response.ok(orderRepository.getAllOrders().size()).build();
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -51,6 +56,15 @@ public class OrderResources {
         String url = uriInfo.getAbsolutePath() + "/" + orderObj.getId();
         URI uri = URI.create(url);
         return Response.created(uri).build();
+    }
+
+    @GET //Get at http://localhost:XXXX/BookStore/books?subject=Computer Science
+    //@RolesAllowed({"TEACHER","ADMIN"})
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllOrders() {
+        GenericEntity<Collection<Order>> entity = new GenericEntity<>(orderRepository.getAllOrders()) {
+        };
+        return Response.ok(entity).build();
     }
 
 }

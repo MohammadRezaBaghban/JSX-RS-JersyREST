@@ -27,7 +27,6 @@ public class FakeSubjectRepository implements ISubjectRepository {
         return instance;
     }
 
-
     @Override
     public int count() {
         return subjects.size();

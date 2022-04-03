@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface IOrderRepository {
 
+    List<Order> getAllOrders();
     Subject getSubjectByName(String name);
     Book getBookByName(String name);
     Order add(Order order);

@@ -1,4 +1,5 @@
 import model.Book;
+import model.Order;
 import model.Subject;
 import model.Subject;
 
@@ -273,6 +274,47 @@ public class EndpointTests {
         public static void testCreate(WebTarget service, String name) {
             getNumberObject(service);
             createSubjectByName(service, name);
+            getNumberObject(service);
+        }
+    }
+
+    public static class OrderTest{
+
+        public static void getAllOrderObjects(WebTarget service) {
+            Invocation.Builder requestBuilder = service.request().accept(MediaType.APPLICATION_JSON);
+            Response response = requestBuilder.get();
+
+            if (response.getStatus() == Response.Status.OK.getStatusCode())
+                handleCollectionOfOrders(response);
+            else printError(response);
+        }
+
+        public static void handleCollectionOfOrders(Response response) {
+            GenericType<ArrayList<Order>> genericType = new GenericType<>() {
+            };
+            ArrayList<Order> entity = response.readEntity(genericType);
+            System.out.println("The resources response is: ");
+            for (Order order : entity) {
+                System.out.println("\t" + order);
+            }
+        }
+
+        public static void createBookOrder(WebTarget service, String BookName, String subjectName){
+            Order order = new Order(BookName, subjectName);
+            Entity<Order> entity = Entity.entity(order, MediaType.APPLICATION_JSON);
+
+            Response response = service
+                    .request().accept(MediaType.APPLICATION_JSON)
+                    .post(entity);
+
+            if (response.getStatus() == Response.Status.NO_CONTENT.getStatusCode()) {
+                System.out.println("POST order is updated");
+            } else printError(response);
+        }
+
+        public static void testCreate(WebTarget service, String BookName, String subjectName) {
+            getNumberObject(service);
+            createBookOrder(service, BookName,subjectName);
             getNumberObject(service);
         }
     }
