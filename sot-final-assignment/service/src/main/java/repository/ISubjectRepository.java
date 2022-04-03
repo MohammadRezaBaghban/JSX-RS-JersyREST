@@ -15,9 +15,9 @@ public interface ISubjectRepository {
 
     Subject getSubjectByIndex(int index);
 
-    void deleteById(int bookId);
+    void deleteById(int subjectId);
 
-    Subject add(Subject book);
+    Subject add(Subject subject);
 
-    void update(int bookId, Subject book);
+    void update(int subjectId, Subject subject);
 }

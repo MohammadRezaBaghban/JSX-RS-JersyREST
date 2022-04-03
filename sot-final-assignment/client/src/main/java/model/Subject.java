@@ -47,4 +47,8 @@ public class Subject {
     public int hashCode() {
         return Objects.hash(id, name);
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

@@ -4,9 +4,7 @@ import model.Book;
 import repository.FakeBookRepository;
 import repository.IBookRepository;
 
-import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
@@ -16,9 +14,9 @@ import java.util.stream.Collectors;
 @Path("/books")
 public class BooksResources {
 
+    private final IBookRepository bookRepository;
     @Context
     private UriInfo uriInfo;
-    private IBookRepository bookRepository;
 
     public BooksResources() {
         this.bookRepository = FakeBookRepository.getInstance();
@@ -45,9 +43,8 @@ public class BooksResources {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getFirstBook() {
         var book = bookRepository.getBookByIndex(0);
-        if (book == null) {
+        if (book == null)
             return Response.status(Response.Status.NOT_FOUND).build();
-        }
         return Response.ok(book).build();
     }
 
@@ -104,7 +101,7 @@ public class BooksResources {
 
     @DELETE //Delete at http://XXXX/BookStore/Books/3
     @Path("{id}")
-    public Response deleteStudent(@PathParam("id") int bookId) {
+    public Response deleteBook(@PathParam("id") int bookId) {
         bookRepository.deleteById(bookId);
         return Response.noContent().build();
     }
@@ -112,12 +109,12 @@ public class BooksResources {
 
     @POST //Post at http://localhost:XXXX:/BookStore/books/
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response createStudent(
+    public Response createBook(
             @FormParam("name") String name,
             @FormParam("subject") String subject,
             @FormParam("price") double price
-            ) {
-        var book = new Book(name,subject,price);
+    ) {
+        var book = new Book(name, subject, price);
         bookRepository.add(book);
 
         // url of the created book
@@ -131,7 +128,7 @@ public class BooksResources {
     @Produces(MediaType.APPLICATION_JSON)
     public Response create(Book book) {
 
-        var bookObj = new Book(book.getName(),book.getSubject(),book.getPrice());
+        Book bookObj = new Book(book.getName(), book.getSubject(), book.getPrice());
         bookRepository.add(bookObj);
 
         String url = uriInfo.getAbsolutePath() + "/" + bookObj.getId();
@@ -142,14 +139,16 @@ public class BooksResources {
     @PUT //PUT at http://localhost:XXXX/BookStore/Book/id
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("{id}")
-    public Response updateStudent(@PathParam("id") int bookId, Book book) {
+    public Response updateBook(@PathParam("id") int bookId, Book book) {
         if (bookRepository.getById(bookId) == null) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity("Please provide a valid book id.")
                     .build();
         }
-        bookRepository.update(bookId,book);
+        bookRepository.update(bookId, book);
         return Response.noContent().build();
     }
+
+
 
 }
