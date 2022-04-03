@@ -107,11 +107,9 @@ public class SubjectsResources {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response create(Subject subject) {
+        subjectRepository.add(subject);
 
-        Subject subjectObj = new Subject(subject.getName());
-        subjectRepository.add(subjectObj);
-
-        String url = uriInfo.getAbsolutePath() + "/" + subjectObj.getId();
+        String url = uriInfo.getAbsolutePath() + "/" + subject.getId();
         URI uri = URI.create(url);
         return Response.created(uri).build();
     }
