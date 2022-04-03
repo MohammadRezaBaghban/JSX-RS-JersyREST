@@ -28,25 +28,27 @@ public class RestClient {
     }
 
     public static void testBooks() {
-        EndpointTests.BookTest.callHello(serviceBooks);
-        EndpointTests.BookTest.getNumberObject(serviceBooks);
+        EndpointTests.callHello(serviceBooks);
+        EndpointTests.getNumberObject(serviceBooks);
         EndpointTests.BookTest.getFirstObject(serviceBooks);
         EndpointTests.BookTest.getAllObjects(serviceBooks);
-        EndpointTests.BookTest.getObjectById(serviceBooks, "2");
-        EndpointTests.BookTest.getObjectById(serviceBooks, "10");
+        EndpointTests.getObjectById(serviceBooks, "2");
+        EndpointTests.getObjectById(serviceBooks, "10");
         EndpointTests.BookTest.getAllBooksByQueryParameter(serviceBooks, "Computer Science");
         EndpointTests.BookTest.searchBooksBySubjectAndMaxPrice(serviceBooks, "Natural Science", 20);
 
         // Update Book
         EndpointTests.BookTest.testUpdate(serviceBooks,3,"Introduction to user interface", "UX Design",38.7);
         // Delete Book
-        EndpointTests.BookTest.testDelete(serviceBooks,3);
+        EndpointTests.testDelete(serviceBooks,3);
         // Create Book
         EndpointTests.BookTest.testCreate(serviceBooks,"Logic & Set Theory","Mathematics",46.0);
     }
 
     public static void testSubjects() {
-        //callHello(serviceSubjects);
+        EndpointTests.callHello(serviceSubjects);
+        EndpointTests.getNumberObject(serviceSubjects);
+
     }
 
 }
