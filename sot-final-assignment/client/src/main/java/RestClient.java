@@ -12,6 +12,7 @@ public class RestClient {
 
     private static WebTarget serviceBooks;
     private static WebTarget serviceSubjects;
+    private static WebTarget serviceOrders;
 
     public static void main(String[] args) {
 
@@ -22,7 +23,9 @@ public class RestClient {
         Client client = ClientBuilder.newClient(new ClientConfig());
         serviceBooks = client.target(URI.create("http://localhost:900/BookStore/books"));
         serviceSubjects = client.target(URI.create("http://localhost:900/BookStore/subjects"));
+        serviceOrders = client.target(URI.create("http://localhost:900/BookStore/orders"));
 
+        testOrder();
         testSubjects();
         testBooks();
     }
@@ -60,7 +63,21 @@ public class RestClient {
         EndpointTests.testDelete(serviceSubjects,3);
         // Create Book
         EndpointTests.SubjectTest.testCreate(serviceSubjects,"Sociology");
+    }
 
+    public static void testOrder(){
+        EndpointTests.callHello(serviceOrders);
+        EndpointTests.getNumberObject(serviceOrders);
+        // Invalid creation
+        EndpointTests.OrderTest.createBookOrder(serviceOrders,"Probability & statistics","Mathematics");
+        EndpointTests.OrderTest.createBookOrder(serviceOrders,"Probability and statistics","Mathematic");
+        EndpointTests.OrderTest.createBookOrder(serviceOrders,"Probability and statistics","Medical");
+        // Correct Creation
+        EndpointTests.OrderTest.createBookOrder(serviceOrders,"Probability and statistics","Mathematics");
+        EndpointTests.OrderTest.createBookOrder(serviceOrders,"Linear Algebra & Application","Mathematics");
+        EndpointTests.OrderTest.createBookOrder(serviceOrders,"Database & Data Modelling","Computer Science");
+        EndpointTests.getNumberObject(serviceOrders); // Should be 3
+        EndpointTests.OrderTest.getAllOrderObjects(serviceOrders);
     }
 
 }
