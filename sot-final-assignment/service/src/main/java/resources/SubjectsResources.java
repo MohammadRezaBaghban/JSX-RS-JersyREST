@@ -38,6 +38,7 @@ public class SubjectsResources {
 
     @GET //GET at http://localhost:XXXX/BookStore/subjects/count
     @Path("count")
+    @PermitAll
     @Produces(MediaType.TEXT_PLAIN)
     public Response getCount() {
         return Response.ok(subjectRepository.count()).build();
@@ -45,6 +46,7 @@ public class SubjectsResources {
 
     @GET //GET at http:localhost:XXXX/BookStore/subjects/first
     @Path("first")
+    @PermitAll
     @Produces(MediaType.APPLICATION_JSON)
     public Response getFirstSubject() {
         var book = subjectRepository.getSubjectByIndex(0);
@@ -55,6 +57,7 @@ public class SubjectsResources {
 
     @GET //GET at http:localhost:XXXX/BookStore/books/first
     @Path("{id}")
+    @PermitAll
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSubjectById(@PathParam("id") int subjectId) {
         var subject = subjectRepository.getById(subjectId);
@@ -63,7 +66,7 @@ public class SubjectsResources {
     }
 
     @GET //Get at http://localhost:XXXX/BookStore/subjects?subject=Computer Science
-    //@RolesAllowed({"TEACHER","ADMIN"})
+    @PermitAll
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllSubject(@QueryParam("subject") String name) {
 
@@ -84,6 +87,7 @@ public class SubjectsResources {
     }
 
     @DELETE //Delete at http://XXXX/BookStore/Subjects/3
+    @RolesAllowed({"BOOKKEEPER","ADMIN"})
     @Path("{id}")
     public Response deleteStudent(@PathParam("id") int subjectId) {
         subjectRepository.deleteById(subjectId);
@@ -92,6 +96,7 @@ public class SubjectsResources {
 
     @POST //Post at http://localhost:XXXX:/BookStore/subjects/
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @RolesAllowed({"BOOKKEEPER","ADMIN"})
     public Response createSubject(
             @FormParam("name") String name) {
         var subject = new Subject(name);
@@ -106,6 +111,7 @@ public class SubjectsResources {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"BOOKKEEPER","ADMIN"})
     public Response create(Subject subject) {
         subjectRepository.add(subject);
 
@@ -116,6 +122,7 @@ public class SubjectsResources {
 
     @PUT //PUT at http://localhost:XXXX/BookStore/Subjects/id
     @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"BOOKKEEPER","ADMIN"})
     @Path("{id}")
     public Response updateSubject(@PathParam("id") int subjectId, Subject subject) {
         if (subjectRepository.getById(subjectId) == null) {

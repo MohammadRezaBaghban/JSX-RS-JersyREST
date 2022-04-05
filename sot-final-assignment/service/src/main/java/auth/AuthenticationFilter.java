@@ -1,6 +1,8 @@
 package auth;
 
 import model.UserAccount;
+import repository.FakeAccountRepository;
+import repository.IAccountRepository;
 
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
@@ -21,16 +23,14 @@ public class AuthenticationFilter implements ContainerRequestFilter {
      * - resourceInfo contains information about the requested operation (GET, PUT, POST ...).
      * - resourceInfo will be assigned/set automatically by the Jersey framework, you do not need to assign/set it.
      */
-    private static Map<String, UserAccount> credentials = new HashMap<String, UserAccount>();
-
     @Context
     private ResourceInfo resourceInfo;
+    private IAccountRepository accountRepository = FakeAccountRepository.getInstance();
 
     /*
      Get information about the service method which is being called.
      This information includes the annotated/permitted roles.
      */
-
 
     // requestContext contains information about the HTTP request message
     // Here we will perform Authentication and authorization
@@ -89,7 +89,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
         // Check if username and password are valid (e.g., database)
         // If not valid: abort with UNAUTHORIZED and stop
-        if (!isValidUser(username, password)) {
+        if (!accountRepository.isValidUser(username, password)) {
             Response response = Response
                     .status(Response.Status.UNAUTHORIZED)
                     .entity("Inavlid username and/or password.")
@@ -113,39 +113,10 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                 if not isUserAllowed abort the requestContext with FORBIDDEN response
              */
 
-            if (!isUserAllowed(username, password, rolesSet)) {
+            if (!accountRepository.isUserAllowed(username, password, rolesSet)) {
                 Response response = Response.status(Response.Status.FORBIDDEN).build();
                 requestContext.abortWith(response);
             }
         }
     }
-
-    private boolean isValidUser(String username, String password) {
-        setup();
-        if (credentials.containsKey(username)) {
-            var credentialPassword = credentials.get(username);
-            return credentialPassword.get_password().equals(password);
-        }
-        return false;
-    }
-
-    private boolean isUserAllowed(String username, String password, Set<String> rolesSet) {
-        var user = credentials.get(username);
-        var userRoles = user.get_roles();
-        for (String role : userRoles ) {
-            if (rolesSet.contains(role))
-                return true;
-        }
-        return false;
-    }
-
-    private void setup() {
-        if (!credentials.containsKey("mrbhmr@gmail.com")) {
-            var user = new UserAccount("mrbhmr@gmail.com", "1234", new ArrayList<String>());
-            user.get_roles().add("TEACHER");
-            credentials.put("mrbhmr@gmail.com", user);
-        }
-    }
-
-
 }

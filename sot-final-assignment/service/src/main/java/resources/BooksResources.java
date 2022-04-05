@@ -5,6 +5,7 @@ import repository.FakeBookRepository;
 import repository.IBookRepository;
 
 import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
@@ -33,6 +34,7 @@ public class BooksResources {
 
     @GET //GET at http://localhost:XXXX/BookStore/books/count
     @Path("count")
+    @PermitAll
     @Produces(MediaType.TEXT_PLAIN)
     public Response getCount() {
         return Response.ok(bookRepository.count()).build();
@@ -40,6 +42,7 @@ public class BooksResources {
 
     @GET //GET at http:localhost:XXXX/BookStore/books/first
     @Path("first")
+    @PermitAll
     @Produces(MediaType.APPLICATION_JSON)
     public Response getFirstBook() {
         var book = bookRepository.getBookByIndex(0);
@@ -50,6 +53,7 @@ public class BooksResources {
 
     @GET //GET at http:localhost:XXXX/BookStore/books/first
     @Path("{id}")
+    @PermitAll
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBookById(@PathParam("id") int bookId) {
         var book = bookRepository.getById(bookId);
@@ -60,7 +64,7 @@ public class BooksResources {
     }
 
     @GET //Get at http://localhost:XXXX/BookStore/books?subject=Computer Science
-    //@RolesAllowed({"TEACHER","ADMIN"})
+    @PermitAll
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllBooks(@QueryParam("subject") String name) {
 
@@ -100,6 +104,7 @@ public class BooksResources {
     }
 
     @DELETE //Delete at http://XXXX/BookStore/Books/3
+    @RolesAllowed({"BOOKKEEPER","ADMIN"})
     @Path("{id}")
     public Response deleteBook(@PathParam("id") int bookId) {
         bookRepository.deleteById(bookId);
@@ -108,6 +113,7 @@ public class BooksResources {
 
 
     @POST //Post at http://localhost:XXXX:/BookStore/books/
+    @RolesAllowed({"BOOKKEEPER","ADMIN"})
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response createBook(
             @FormParam("name") String name,
@@ -126,6 +132,7 @@ public class BooksResources {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"BOOKKEEPER","ADMIN"})
     public Response create(Book book) {
 
         Book bookObj = new Book(book.getName(), book.getSubject(), book.getPrice());
@@ -138,6 +145,7 @@ public class BooksResources {
 
     @PUT //PUT at http://localhost:XXXX/BookStore/Book/id
     @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"BOOKKEEPER","ADMIN"})
     @Path("{id}")
     public Response updateBook(@PathParam("id") int bookId, Book book) {
         if (bookRepository.getById(bookId) == null) {
