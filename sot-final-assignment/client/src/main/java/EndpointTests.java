@@ -1,6 +1,4 @@
-import model.Book;
-import model.Order;
-import model.Subject;
+import model.*;
 import model.Subject;
 
 import javax.ws.rs.client.Entity;
@@ -16,8 +14,7 @@ public class EndpointTests {
 
 
     public static void callHello(WebTarget service) {
-        Invocation.Builder requestBuilder = service.path("hello").request().accept(MediaType.TEXT_PLAIN);
-        Response response = requestBuilder.get();
+        Response response = requestBuilder(service,"hello").accept(MediaType.TEXT_PLAIN).get();
 
         if (response.getStatus() == 200) {
             String entity = response.readEntity(String.class);
@@ -28,8 +25,8 @@ public class EndpointTests {
     }
 
     public static void getNumberObject(WebTarget service) {
-        Invocation.Builder requestBuilder = service.path("count").request().accept(MediaType.TEXT_PLAIN);
-        Response response = requestBuilder.get();
+        var requestBuilder = requestBuilder(service,"count").accept(MediaType.TEXT_PLAIN);
+        var response = requestBuilder.get();
         var endPointName = endPointName(service);
 
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
@@ -39,7 +36,7 @@ public class EndpointTests {
     }
 
     public static void getObjectById(WebTarget service, String id) {
-        Invocation.Builder requestBuilder = service.path(id).request().accept(MediaType.APPLICATION_JSON);
+        var requestBuilder = requestBuilder(service,id).accept(MediaType.APPLICATION_JSON);
         endPointType endPointName = endPointName(service);
         Response response = requestBuilder.get();
 
@@ -55,7 +52,7 @@ public class EndpointTests {
     }
 
     public static void deleteObjectById(WebTarget service, String id) {
-        Invocation.Builder requestBuilder = service.path(id).request().accept(MediaType.TEXT_PLAIN);
+        Invocation.Builder requestBuilder = requestBuilder(service,id).accept(MediaType.TEXT_PLAIN);
         Response response = requestBuilder.delete();
 
         if (response.getStatus() == Response.Status.NO_CONTENT.getStatusCode())
@@ -76,6 +73,10 @@ public class EndpointTests {
         System.err.println(entity);
     }
 
+    public static Invocation.Builder requestBuilder(WebTarget service, String path){
+        return service.path(path).request().header("Authorization",RestClient._jwtToken);
+    }
+
     public static endPointType endPointName(WebTarget service) {
         if (service.getUri().toString().contains("books"))
             return endPointType.Books;
@@ -85,7 +86,7 @@ public class EndpointTests {
     public static class BookTest {
 
         public static void getFirstObject(WebTarget service) {
-            Invocation.Builder requestBuilder = service.path("first").request().accept(MediaType.APPLICATION_JSON);
+            Invocation.Builder requestBuilder = requestBuilder(service,"first").accept(MediaType.APPLICATION_JSON);
             Response response = requestBuilder.get();
             var endPointName = endPointName(service);
 
@@ -96,7 +97,7 @@ public class EndpointTests {
         }
 
         public static void getAllObjects(WebTarget service) {
-            Invocation.Builder requestBuilder = service.request().accept(MediaType.APPLICATION_JSON);
+            Invocation.Builder requestBuilder = requestBuilder(service,"").accept(MediaType.APPLICATION_JSON);
             Response response = requestBuilder.get();
 
             if (response.getStatus() == Response.Status.OK.getStatusCode())
@@ -108,6 +109,7 @@ public class EndpointTests {
             Invocation.Builder requestBuilder = service
                     .queryParam("subject", subjectName)
                     .request()
+                    .header("Authorization",RestClient._jwtToken)
                     .accept(MediaType.APPLICATION_JSON);
             Response response = requestBuilder.get();
 
@@ -120,7 +122,9 @@ public class EndpointTests {
             Invocation.Builder requestBuilder = service
                     .path("search/" + subjectName)
                     .queryParam("maxPrice", MaxPrice)
-                    .request().accept(MediaType.APPLICATION_JSON);
+                    .request()
+                    .header("Authorization",RestClient._jwtToken)
+                    .accept(MediaType.APPLICATION_JSON);
             Response response = requestBuilder.get();
 
             if (response.getStatus() == Response.Status.OK.getStatusCode())
@@ -145,7 +149,7 @@ public class EndpointTests {
             form.param("price", String.valueOf(price));
             Entity<Form> entity = Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED);
 
-            Response response = serviceTarget.request().accept(MediaType.TEXT_PLAIN).post(entity);
+            Response response = requestBuilder(serviceTarget,"").accept(MediaType.TEXT_PLAIN).post(entity);
             if (response.getStatus() == Response.Status.CREATED.getStatusCode()) {
                 String bookUrl = response.getHeaderString("Location");
                 System.out.println("POST book is created and can be accessed at: " + bookUrl);
@@ -157,9 +161,8 @@ public class EndpointTests {
             book.setBookId(id);
             Entity<Book> entity = Entity.entity(book, MediaType.APPLICATION_JSON);
 
-            Response response = serviceTarget
-                    .path(Integer.toString(book.getId()))
-                    .request().accept(MediaType.TEXT_PLAIN)
+            Response response = requestBuilder(serviceTarget,Integer.toString(book.getId()))
+                    .accept(MediaType.TEXT_PLAIN)
                     .put(entity);
 
             if (response.getStatus() == Response.Status.NO_CONTENT.getStatusCode()) {
@@ -184,7 +187,7 @@ public class EndpointTests {
 
     public static class SubjectTest {
         public static void getFirstObject(WebTarget service) {
-            Invocation.Builder requestBuilder = service.path("first").request().accept(MediaType.APPLICATION_JSON);
+            Invocation.Builder requestBuilder = requestBuilder(service,"first").accept(MediaType.APPLICATION_JSON);
             Response response = requestBuilder.get();
 
             if (response.getStatus() == Response.Status.OK.getStatusCode())
@@ -193,7 +196,7 @@ public class EndpointTests {
         }
 
         public static void getAllObjects(WebTarget service) {
-            Invocation.Builder requestBuilder = service.request().accept(MediaType.APPLICATION_JSON);
+            Invocation.Builder requestBuilder = requestBuilder(service,"").accept(MediaType.APPLICATION_JSON);
             Response response = requestBuilder.get();
 
             if (response.getStatus() == Response.Status.OK.getStatusCode())
@@ -202,7 +205,7 @@ public class EndpointTests {
         }
 
         public static void getObjectById(WebTarget service, String id) {
-            Invocation.Builder requestBuilder = service.path(id).request().accept(MediaType.APPLICATION_JSON);
+            Invocation.Builder requestBuilder = requestBuilder(service,id).accept(MediaType.APPLICATION_JSON);
             Response response = requestBuilder.get();
 
             if (response.getStatus() == Response.Status.OK.getStatusCode())
@@ -214,6 +217,7 @@ public class EndpointTests {
             Invocation.Builder requestBuilder = service
                     .queryParam("subject", subjectName)
                     .request()
+                    .header("Authorization",RestClient._jwtToken)
                     .accept(MediaType.APPLICATION_JSON);
             Response response = requestBuilder.get();
 
@@ -242,7 +246,7 @@ public class EndpointTests {
             form.param("name", name);
             Entity<Form> entity = Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED);
 
-            Response response = serviceTarget.request().accept(MediaType.TEXT_PLAIN).post(entity);
+            Response response = requestBuilder(serviceTarget,"").accept(MediaType.TEXT_PLAIN).post(entity);
             if (response.getStatus() == Response.Status.CREATED.getStatusCode()) {
                 String subjectUrl = response.getHeaderString("Location");
                 System.out.println("POST subject is created and can be accessed at: " + subjectUrl);
@@ -254,9 +258,8 @@ public class EndpointTests {
             subject.setId(id);
             Entity<Subject> entity = Entity.entity(subject, MediaType.APPLICATION_JSON);
 
-            Response response = serviceTarget
-                    .path(Integer.toString(subject.getId()))
-                    .request().accept(MediaType.TEXT_PLAIN)
+            Response response = requestBuilder(serviceTarget,Integer.toString(subject.getId()))
+                    .accept(MediaType.TEXT_PLAIN)
                     .put(entity);
 
             if (response.getStatus() == Response.Status.NO_CONTENT.getStatusCode()) {
@@ -278,10 +281,10 @@ public class EndpointTests {
         }
     }
 
-    public static class OrderTest{
+    public static class OrderTest {
 
         public static void getAllOrderObjects(WebTarget service) {
-            Invocation.Builder requestBuilder = service.request().accept(MediaType.APPLICATION_JSON);
+            Invocation.Builder requestBuilder = requestBuilder(service,"").accept(MediaType.APPLICATION_JSON);
             Response response = requestBuilder.get();
 
             if (response.getStatus() == Response.Status.OK.getStatusCode())
@@ -299,12 +302,12 @@ public class EndpointTests {
             }
         }
 
-        public static void createBookOrder(WebTarget service, String BookName, String subjectName){
+        public static void createBookOrder(WebTarget service, String BookName, String subjectName) {
             Order order = new Order(BookName, subjectName);
             Entity<Order> entity = Entity.entity(order, MediaType.APPLICATION_JSON);
 
-            Response response = service
-                    .request().accept(MediaType.APPLICATION_JSON)
+            Response response = requestBuilder(service,"")
+                    .accept(MediaType.APPLICATION_JSON)
                     .post(entity);
 
             if (response.getStatus() == Response.Status.NO_CONTENT.getStatusCode()) {
@@ -314,8 +317,44 @@ public class EndpointTests {
 
         public static void testCreate(WebTarget service, String BookName, String subjectName) {
             getNumberObject(service);
-            createBookOrder(service, BookName,subjectName);
+            createBookOrder(service, BookName, subjectName);
             getNumberObject(service);
+        }
+    }
+
+    public static class AuthTest {
+
+        public static void register(WebTarget service, String username, String password) {
+            Account account = new Account(username, password);
+            Entity<Account> entity = Entity.entity(account, MediaType.APPLICATION_JSON);
+
+            Response response = requestBuilder(service,"register")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .post(entity);
+
+            if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+                System.out.println(response.getEntity());
+            } else printError(response);
+        }
+
+        public static String login(WebTarget service, String username, String password) {
+            String token = null;
+            Account account = new Account(username, password);
+            Entity<Account> entity = Entity.entity(account, MediaType.APPLICATION_JSON);
+
+            Response response = requestBuilder(service,"login").accept(MediaType.APPLICATION_JSON)
+                    .post(entity);
+
+            if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+                token = response.readEntity(String.class);
+                String authorizationHeader = "Bearer " + token;
+                Invocation.Builder requestBuilder = service.path("hello").request()
+                        .header("Authorization", authorizationHeader)
+                        .accept(MediaType.TEXT_PLAIN);
+
+                System.out.println("Login was successful");
+            } else printError(response);
+            return token;
         }
     }
 

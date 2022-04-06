@@ -13,6 +13,8 @@ public class RestClient {
     private static WebTarget serviceBooks;
     private static WebTarget serviceSubjects;
     private static WebTarget serviceOrders;
+    private static WebTarget serviceAuth;
+    public static String _jwtToken = "";
 
     public static void main(String[] args) {
 
@@ -25,7 +27,9 @@ public class RestClient {
         serviceBooks = client.target(URI.create("http://localhost:900/BookStore/books"));
         serviceSubjects = client.target(URI.create("http://localhost:900/BookStore/subjects"));
         serviceOrders = client.target(URI.create("http://localhost:900/BookStore/orders"));
+        serviceAuth = client.target(URI.create("http://localhost:900/BookStore/auth"));
 
+        testAuth();
         testOrder();
         testSubjects();
         testBooks();
@@ -79,6 +83,12 @@ public class RestClient {
         EndpointTests.OrderTest.createBookOrder(serviceOrders,"Database & Data Modelling","Computer Science");
         EndpointTests.getNumberObject(serviceOrders); // Should be 3
         EndpointTests.OrderTest.getAllOrderObjects(serviceOrders);
+    }
+
+    public static void testAuth(){
+        EndpointTests.callHello(serviceAuth);
+        EndpointTests.AuthTest.register(serviceAuth,"test@gmail.com","1234");
+        _jwtToken = EndpointTests.AuthTest.login(serviceAuth,"mrbhmr@gmail.com","1234");
     }
 
 }
