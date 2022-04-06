@@ -56,7 +56,6 @@ public class RestClient {
         serviceOrders = client.target(URI.create("https://localhost:800/BookStore/orders"));
         serviceAuth = client.target(UriBuilder.fromUri("https://localhost:800/BookStore/auth").build());
 
-
         testAuth();
         testOrder();
         testSubjects();
