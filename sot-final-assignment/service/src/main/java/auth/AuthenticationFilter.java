@@ -1,5 +1,6 @@
 package auth;
 
+import io.jsonwebtoken.*;
 import repository.FakeAccountRepository;
 import repository.IAccountRepository;
 
@@ -12,6 +13,7 @@ import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -24,6 +26,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
      */
     @Context
     private ResourceInfo resourceInfo;
+    private String errorInJwtProcessing = "";
     private IAccountRepository accountRepository = FakeAccountRepository.getInstance();
 
     /*
@@ -41,7 +44,8 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     public void filter(ContainerRequestContext requestContext) throws IOException {
 
         final String AUTHORIZATION_PROPERTY = "Authorization";
-        final String AUTHENTICATION_SCHEME = "Basic";
+        final String AUTHENTICATION_SCHEME = "Bearer";
+        errorInJwtProcessing = "Error in parsing JWT";
 
         Method method = resourceInfo.getResourceMethod();
         // if access is allowed for all -> do not check anything further : access is approved for all
@@ -62,7 +66,6 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
         // Get Response Header
         final MultivaluedMap<String, String> headers = requestContext.getHeaders();
-
         // Fetch Authorization Header
         final List<String> authorization = headers.get(AUTHORIZATION_PROPERTY);
 
@@ -76,22 +79,14 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         }
 
         // Get encoded username and password
-        final String encodedCredentials = authorization.get(0).replaceFirst(AUTHENTICATION_SCHEME + " ", "");
+        final String jwtEncodedCredentials = authorization.get(0).replaceFirst(AUTHENTICATION_SCHEME + " ", "");
 
-        //Decode username and password into one string
-        String credentials = new String(Base64.getDecoder().decode(encodedCredentials.getBytes()));
+        String username = processJwtToken(jwtEncodedCredentials);
 
-        // Split username and password into one string
-        final StringTokenizer tokenizer = new StringTokenizer(credentials, ":");
-        final String username = tokenizer.nextToken();
-        final String password = tokenizer.nextToken();
-
-        // Check if username and password are valid (e.g., database)
-        // If not valid: abort with UNAUTHORIZED and stop
-        if (!accountRepository.isValidUser(username, password)) {
+        if (!errorInJwtProcessing.equals("") || username == null) {
             Response response = Response
                     .status(Response.Status.UNAUTHORIZED)
-                    .entity("Inavlid username and/or password.")
+                    .entity(errorInJwtProcessing)
                     .build();
             requestContext.abortWith(response);
             return;
@@ -117,5 +112,32 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                 requestContext.abortWith(response);
             }
         }
+    }
+
+    public String processJwtToken(String jwtToken) {
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(DatatypeConverter.parseBase64Binary(accountRepository.getSecret()))
+                    .parseClaimsJws(jwtToken).getBody();
+
+            return claims.get("username").toString();//  get the username
+        } catch (ExpiredJwtException e) {
+            //Exception indicating that a JWT was accepted after it expired and must be rejected.
+            errorInJwtProcessing = "Your JWT token has been expired, please login again";
+        } catch (MalformedJwtException e) {
+            //Exception indicating that a JWT was not correctly constructed and should be rejected.
+            errorInJwtProcessing = "Your JWT token is not correctly constructed.";
+        } catch (PrematureJwtException e) {
+            //Exception indicating that a JWT was accepted before it is allowed to be accessed and must be rejected.
+            errorInJwtProcessing = "Your JWT token is not yet valid. Please try again later";
+        } catch (SignatureException e) {
+            //Exception indicating that either calculating a signature or verifying an existing signature of a JWT failed.
+            errorInJwtProcessing = "Your JWT token cannot be processed correctly";
+        } catch (UnsupportedJwtException e) {
+            //Exception thrown when receiving a JWT in a particular format/configuration that does not match the format expected by the application.
+            //For example, this exception would be thrown if parsing an unsigned plaintext JWT when the application requires a cryptographically signed Claims JWS instead.
+            errorInJwtProcessing = "Your JWT token is not in correct format that application accepting";
+        }
+        return null;
     }
 }
