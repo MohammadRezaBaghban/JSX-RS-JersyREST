@@ -20,6 +20,8 @@ import java.util.*;
 
 public class AuthenticationFilter implements ContainerRequestFilter {
 
+    private final String AUTHORIZATION_PROPERTY = "Authorization";
+    private final String AUTHENTICATION_SCHEME = "Bearer";
     /**
      * - resourceInfo contains information about the requested operation (GET, PUT, POST ...).
      * - resourceInfo will be assigned/set automatically by the Jersey framework, you do not need to assign/set it.
@@ -34,17 +36,10 @@ public class AuthenticationFilter implements ContainerRequestFilter {
      This information includes the annotated/permitted roles.
      */
 
+    @Override
     // requestContext contains information about the HTTP request message
     // Here we will perform Authentication and authorization
-        /* if we want to abort HTTP request, we do this:
-            Response response  = Response.status(Response.status.UNAUTHORIZED).build();
-            requestContext.abortwith(response);
-        */
-    @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-
-        final String AUTHORIZATION_PROPERTY = "Authorization";
-        final String AUTHENTICATION_SCHEME = "Bearer";
         errorInJwtProcessing = "Error in parsing JWT";
 
         Method method = resourceInfo.getResourceMethod();
@@ -54,64 +49,61 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
         // if access is denied for all: deny access
         if (method.isAnnotationPresent(DenyAll.class)) {
-            Response response = Response.status(Response.Status.FORBIDDEN).build();
-            requestContext.abortWith(response);
-            return;
-        }
-
-        // Authentication
-        // 1. extract username and password from requestContext
-        // 2. validate username and password (e.g. database)
-        // 3. if invalid user, abort requestContext with Unauthized response
-
-        // Get Response Header
-        final MultivaluedMap<String, String> headers = requestContext.getHeaders();
-        // Fetch Authorization Header
-        final List<String> authorization = headers.get(AUTHORIZATION_PROPERTY);
-
-        if (authorization == null || authorization.isEmpty()) {
-            Response response = Response
-                    .status(Response.Status.UNAUTHORIZED)
-                    .entity("Missing username and/or password.")
-                    .build();
-            requestContext.abortWith(response);
+            requestContext.abortWith(Response.status(Response.Status.FORBIDDEN).build());
             return;
         }
 
         // Get encoded username and password
-        final String jwtEncodedCredentials = authorization.get(0).replaceFirst(AUTHENTICATION_SCHEME + " ", "");
+        final String jwtEncodedCredentials = extractAuthenticationToken(requestContext);
 
-        String username = processJwtToken(jwtEncodedCredentials);
+        if (jwtEncodedCredentials != null) {
+            String username = processJwtToken(jwtEncodedCredentials);
 
-        if (!errorInJwtProcessing.equals("") || username == null) {
-            Response response = Response
-                    .status(Response.Status.UNAUTHORIZED)
-                    .entity(errorInJwtProcessing)
-                    .build();
-            requestContext.abortWith(response);
-            return;
-        }
-
-        // Authorization
-        // 1. extract allowed roles for requested operation from resourceInfo
-        // 2. check if the user has one these roles
-        // 3. if not, abort requestContext with FROBIDDEN response
-
-        if (method.isAnnotationPresent(RolesAllowed.class)) {
-            // Get Allowed Roles for this method
-            RolesAllowed rolesAnnotation = method.getAnnotation(RolesAllowed.class);
-            Set<String> rolesSet = new HashSet<String>(Arrays.asList(rolesAnnotation.value()));
-
-            /*
-                isUserAllowed: implement this method to check if this user has nay of the roles in the rolesSet
-                if not isUserAllowed abort the requestContext with FORBIDDEN response
-             */
-
-            if (!accountRepository.isUserAllowed(username, password, rolesSet)) {
-                Response response = Response.status(Response.Status.FORBIDDEN).build();
+            if (!errorInJwtProcessing.equals("") || username == null) {
+                var response = generate_unauthorized_response(errorInJwtProcessing);
                 requestContext.abortWith(response);
+                return;
+            } else {
+                // Check if username and password are valid (e.g., database)
+                // If not valid: abort with UNAUTHORIZED and stop
+                if (!accountRepository.isUserExist(username)) {
+                    var response = generate_unauthorized_response("Inavlid username and/or password.");
+                    requestContext.abortWith(response);
+                    return;
+                }
+                check_Authorization(method, requestContext, username);
             }
+        } else return;
+    }
+
+    public Response generate_unauthorized_response(String message) {
+        /* if we want to abort HTTP request, we do this:
+            Response response  = Response.status(Response.status.UNAUTHORIZED).build();
+            requestContext.abortwith(response);
+        */
+        return Response.status(Response.Status.UNAUTHORIZED).entity(message).build();
+    }
+
+    public String extractAuthenticationToken(ContainerRequestContext requestContext) {
+        // Authentication
+        // 1. extract username and password from requestContext
+        // 2. validate username and password (e.g. database)
+        // 3. if invalid user, abort requestContext with Unauthized response
+        // Get Response Header
+        final MultivaluedMap<String, String> headers = requestContext.getHeaders();
+        // Fetch Authorization Header
+        final List<String> authorization = headers.get(AUTHORIZATION_PROPERTY);
+        String token = null;
+
+        if (authorization == null || authorization.isEmpty()) {
+            var response = generate_unauthorized_response("Missing authorization token.");
+            requestContext.abortWith(response);
+            return token;
         }
+
+        // Get encoded username and password
+        token = authorization.get(0).replaceFirst(AUTHENTICATION_SCHEME + " ", "");
+        return token;
     }
 
     public String processJwtToken(String jwtToken) {
@@ -139,5 +131,23 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             errorInJwtProcessing = "Your JWT token is not in correct format that application accepting";
         }
         return null;
+    }
+
+    public void check_Authorization(Method method, ContainerRequestContext requestContext, String username) {
+        // Authorization
+        // 1. extract allowed roles for requested operation from resourceInfo
+        // 2. check if the user has one these roles
+        // 3. if not, abort requestContext with FROBIDDEN response
+
+        if (method.isAnnotationPresent(RolesAllowed.class)) {
+            // Get Allowed Roles for this method
+            RolesAllowed rolesAnnotation = method.getAnnotation(RolesAllowed.class);
+            Set<String> rolesSet = new HashSet<String>(Arrays.asList(rolesAnnotation.value()));
+
+            /*  check if this user has any of the roles in the rolesSet
+                if not isUserAllowed abort the requestContext with FORBIDDEN response */
+            if (!accountRepository.isUserAllowed(username, rolesSet))
+                requestContext.abortWith(Response.status(Response.Status.FORBIDDEN).build());
+        }
     }
 }
