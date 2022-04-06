@@ -1,6 +1,5 @@
 package auth;
 
-import model.UserAccount;
 import repository.FakeAccountRepository;
 import repository.IAccountRepository;
 

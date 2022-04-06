@@ -1,6 +1,7 @@
 import auth.AuthenticationFilter;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.glassfish.jersey.server.ResourceConfig;
+import resources.AccountResources;
 import resources.BooksResources;
 import resources.OrderResources;
 import resources.SubjectsResources;
@@ -10,6 +11,7 @@ import java.util.logging.Logger;
 
 public class CustomApplicationConfig extends ResourceConfig {
     public CustomApplicationConfig() {
+        register(AccountResources.class);
         register(BooksResources.class); // register endpoint BookResources
         register(SubjectsResources.class); // register endpoint SubjectResources
         register(OrderResources.class); // register endpoint OrderResource
