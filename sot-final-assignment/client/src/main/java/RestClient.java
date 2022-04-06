@@ -1,10 +1,16 @@
+import org.glassfish.jersey.SslConfigurator;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import model.Book;
+
+import javax.net.ssl.SSLContext;
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.*;
 import javax.ws.rs.*;
+import java.io.File;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 
 
@@ -16,18 +22,39 @@ public class RestClient {
     private static WebTarget serviceAuth;
     public static String _jwtToken = "";
 
-    public static void main(String[] args) {
+    private static File getFile(String fileName) throws URISyntaxException {
+        ClassLoader classLoader = RestClient.class.getClassLoader();
+        URL url = classLoader.getResource(fileName);
+        if (url == null) {
+            throw new RuntimeException("Cannot open file " + fileName);
+        }
+        return new File(url.toURI());
+    }
 
-        String username = "mrbhmr@gmail.com";
-        String password = "1234";
+    public static void main(String[] args) throws URISyntaxException {
+
+        final File keyStore = getFile("keystore_client");
+        final File trustStore = getFile("truststore_client");
+
+        System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2");
+
+        SslConfigurator sslConfig = SslConfigurator.newInstance()
+                .keyStoreFile(keyStore.getAbsolutePath())
+                .keyStorePassword("asdfgh")
+                .trustStoreFile(trustStore.getAbsolutePath())
+                .trustStorePassword("asdfgh")
+                .keyPassword("asdfgh");
+
+        final SSLContext sslContext = sslConfig.createSSLContext();
+
         ClientConfig config = new ClientConfig();
-        config.register(HttpAuthenticationFeature.basic(username,password));
-
-        Client client = ClientBuilder.newClient(new ClientConfig());
-        serviceBooks = client.target(URI.create("http://localhost:800/BookStore/books"));
-        serviceSubjects = client.target(URI.create("http://localhost:800/BookStore/subjects"));
-        serviceOrders = client.target(URI.create("http://localhost:800/BookStore/orders"));
-        serviceAuth = client.target(URI.create("http://localhost:800/BookStore/auth"));
+        javax.ws.rs.client.Client client = ClientBuilder.newBuilder().withConfig(config)
+                .sslContext(sslContext).build();
+        //URI baseURI = UriBuilder.fromUri("https://localhost:9099/school/students").build();
+        serviceBooks = client.target(URI.create("https://localhost:800/BookStore/books"));
+        serviceSubjects = client.target(URI.create("https://localhost:800/BookStore/subjects"));
+        serviceOrders = client.target(URI.create("https://localhost:800/BookStore/orders"));
+        serviceAuth = client.target(UriBuilder.fromUri("https://localhost:800/BookStore/auth").build());
 
         testAuth();
         testOrder();
