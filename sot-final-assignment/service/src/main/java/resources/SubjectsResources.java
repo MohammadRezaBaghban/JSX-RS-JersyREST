@@ -87,9 +87,9 @@ public class SubjectsResources {
     }
 
     @DELETE //Delete at http://XXXX/BookStore/Subjects/3
-    @RolesAllowed({"BOOKKEEPER","ADMIN"})
+    @RolesAllowed({"ADMIN"})
     @Path("{id}")
-    public Response deleteStudent(@PathParam("id") int subjectId) {
+    public Response deleteSubject(@PathParam("id") int subjectId) {
         subjectRepository.deleteById(subjectId);
         return Response.noContent().build();
     }

@@ -7,6 +7,7 @@ import repository.IBookRepository;
 import repository.IOrderRepository;
 
 import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
@@ -39,6 +40,7 @@ public class OrderResources {
     }
 
     @POST
+    @PermitAll
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response create(Order order) {
@@ -59,7 +61,7 @@ public class OrderResources {
     }
 
     @GET //Get at http://localhost:XXXX/BookStore/books?subject=Computer Science
-    //@RolesAllowed({"TEACHER","ADMIN"})
+    @RolesAllowed({"ADMIN"})
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllOrders() {
         GenericEntity<Collection<Order>> entity = new GenericEntity<>(orderRepository.getAllOrders()) {

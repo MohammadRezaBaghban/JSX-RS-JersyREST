@@ -59,7 +59,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         if (jwtEncodedCredentials != null) {
             String username = processJwtToken(jwtEncodedCredentials);
 
-            if (!errorInJwtProcessing.equals("") || username == null) {
+            if (username == null) {
                 var response = generate_unauthorized_response(errorInJwtProcessing);
                 requestContext.abortWith(response);
                 return;
@@ -147,7 +147,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             /*  check if this user has any of the roles in the rolesSet
                 if not isUserAllowed abort the requestContext with FORBIDDEN response */
             if (!accountRepository.isUserAllowed(username, rolesSet))
-                requestContext.abortWith(Response.status(Response.Status.FORBIDDEN).build());
+                requestContext.abortWith(Response.status(Response.Status.FORBIDDEN).entity("You do not have correct permission for this operation").build());
         }
     }
 }

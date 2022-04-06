@@ -21,5 +21,4 @@ public class Publisher {
             Logger.getLogger(Publisher.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
 }

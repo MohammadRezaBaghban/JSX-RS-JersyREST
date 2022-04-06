@@ -28,7 +28,7 @@ public class FakeAccountRepository implements IAccountRepository{
         _bookKeeper.add("BOOKKEEPER");
         var firstAccount = new Account("mrbhmr@gmail.com","1234");
         firstAccount.set_roles(_rolesAll);
-        credentials.put("mrbhmr@gmail.com",firstAccount);
+        add(firstAccount);
     }
 
     public static FakeAccountRepository getInstance() {
@@ -39,8 +39,18 @@ public class FakeAccountRepository implements IAccountRepository{
     public String getSecret() {return SECRET_KEY;}
 
     @Override
+    public boolean isUserExist(String username) {
+        return credentials.containsKey(username.toLowerCase(Locale.ROOT));
+    }
+
+    @Override
+    public List<String> get_bookKeeper() {
+        return _bookKeeper;
+    }
+
+    @Override
     public boolean isValidUser(String username, String password) {
-        if (credentials.containsKey(username)) {
+        if (isUserExist(username)) {
             var credentialPassword = credentials.get(username);
             return credentialPassword.get_password().equals(password);
         }
@@ -48,11 +58,11 @@ public class FakeAccountRepository implements IAccountRepository{
     }
 
     @Override
-    public boolean isUserAllowed(String username, String password, Set<String> rolesSet) {
+    public boolean isUserAllowed(String username, Set<String> rolesSet) {
         var user = credentials.get(username);
         var userRoles = user.get_roles();
         for (String role : userRoles ) {
-            if (_rolesAll.contains(role))
+            if (rolesSet.contains(role))
                 return true;
         }
         return false;
@@ -64,7 +74,7 @@ public class FakeAccountRepository implements IAccountRepository{
         String tokenId = UUID.randomUUID().toString();
         String issuer = "sot";
         String subject = "practical";
-        long totalMillis = 100000; // token is valid during this time (milliseconds)
+        long totalMillis = 1000000; // token is valid during this time (milliseconds)
 
         //The JWT signature algorithm we will be using to sign the token
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
@@ -98,6 +108,7 @@ public class FakeAccountRepository implements IAccountRepository{
 
     @Override
     public Account add(Account account) {
-        return null;
+        credentials.put(account.get_userName().toLowerCase(Locale.ROOT),account);
+        return account;
     }
 }
