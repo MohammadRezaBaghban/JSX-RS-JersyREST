@@ -24,10 +24,10 @@ public class RestClient {
         config.register(HttpAuthenticationFeature.basic(username,password));
 
         Client client = ClientBuilder.newClient(new ClientConfig());
-        serviceBooks = client.target(URI.create("http://localhost:900/BookStore/books"));
-        serviceSubjects = client.target(URI.create("http://localhost:900/BookStore/subjects"));
-        serviceOrders = client.target(URI.create("http://localhost:900/BookStore/orders"));
-        serviceAuth = client.target(URI.create("http://localhost:900/BookStore/auth"));
+        serviceBooks = client.target(URI.create("http://localhost:800/BookStore/books"));
+        serviceSubjects = client.target(URI.create("http://localhost:800/BookStore/subjects"));
+        serviceOrders = client.target(URI.create("http://localhost:800/BookStore/orders"));
+        serviceAuth = client.target(URI.create("http://localhost:800/BookStore/auth"));
 
         testAuth();
         testOrder();
