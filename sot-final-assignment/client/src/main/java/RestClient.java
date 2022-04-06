@@ -51,10 +51,10 @@ public class RestClient {
         javax.ws.rs.client.Client client = ClientBuilder.newBuilder().withConfig(config)
                 .sslContext(sslContext).build();
         //URI baseURI = UriBuilder.fromUri("https://localhost:9099/school/students").build();
-        serviceBooks = client.target(URI.create("https://localhost:900/BookStore/books"));
-        serviceSubjects = client.target(URI.create("https://localhost:900/BookStore/subjects"));
-        serviceOrders = client.target(URI.create("https://localhost:900/BookStore/orders"));
-        serviceAuth = client.target(UriBuilder.fromUri("https://localhost:900/BookStore/auth").build());
+        serviceBooks = client.target(URI.create("https://localhost:800/BookStore/books"));
+        serviceSubjects = client.target(URI.create("https://localhost:800/BookStore/subjects"));
+        serviceOrders = client.target(URI.create("https://localhost:800/BookStore/orders"));
+        serviceAuth = client.target(UriBuilder.fromUri("https://localhost:800/BookStore/auth").build());
 
 
         testAuth();
